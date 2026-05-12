@@ -7,378 +7,173 @@
   <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body { width:100vw; height:100vh; overflow:hidden; font-family:'Nanum Gothic',sans-serif; cursor:pointer; user-select:none; }
+    .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+    .screen.off { display:none; }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.4} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes rainFall { from{top:-30px} to{top:110%} }
+    @keyframes cdrift { 0%,100%{transform:translateX(0)} 50%{transform:translateX(16px)} }
 
-    body {
-      width: 100vw; height: 100vh;
-      overflow: hidden;
-      font-family: 'Nanum Gothic', sans-serif;
-      cursor: pointer;
-      user-select: none;
-    }
+    /* ── MARIO ── */
+    #s-mario { background:#5C94FC; overflow:hidden; }
+    .cloud { position:absolute; background:white; border-radius:40px; pointer-events:none; }
+    .cloud::before,.cloud::after { content:''; position:absolute; background:white; border-radius:50%; }
+    .cl1 { width:110px; height:36px; top:15%; left:8%; animation:cdrift 9s ease-in-out infinite; }
+    .cl1::before { width:50px; height:50px; top:-22px; left:12px; }
+    .cl1::after  { width:38px; height:38px; top:-16px; left:50px; }
+    .cl2 { width:140px; height:44px; top:10%; left:45%; animation:cdrift 12s ease-in-out infinite reverse; }
+    .cl2::before { width:62px; height:62px; top:-28px; left:18px; }
+    .cl2::after  { width:48px; height:48px; top:-22px; left:68px; }
+    .cl3 { width:90px; height:28px; top:22%; right:10%; animation:cdrift 10s ease-in-out infinite; }
+    .cl3::before { width:40px; height:40px; top:-18px; left:10px; }
+    .cl3::after  { width:32px; height:32px; top:-14px; left:40px; }
+    .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
+    .mario-title .tl { color:#FFD54F; }
+    .hit-ctr { position:absolute; top:28px; right:28px; background:rgba(0,0,0,0.55); color:white; font-weight:800; font-size:1.15rem; padding:7px 16px; border-radius:20px; pointer-events:none; }
+    #brick-wrap { position:absolute; bottom:268px; left:50%; transform:translateX(-50%); pointer-events:none; }
+    #brick-svg { display:block; image-rendering:pixelated; }
+    .brick-bump { animation:brickBump 0.2s ease-out; }
+    @keyframes brickBump { 0%,100%{transform:translateY(0)} 45%{transform:translateY(-10px)} }
+    .heart-pop { position:absolute; font-size:2rem; pointer-events:none; animation:heartFly 0.9s ease-out forwards; left:50%; transform:translateX(-50%); top:-10px; z-index:20; }
+    @keyframes heartFly { 0%{transform:translateX(-50%) translateY(0) scale(0.4);opacity:1} 30%{opacity:1} 100%{transform:translateX(-50%) translateY(-110px) scale(1.6);opacity:0} }
+    #mario-char { position:absolute; bottom:80px; left:calc(50% - 32px); pointer-events:none; }
+    #mario-svg { display:block; image-rendering:pixelated; }
+    .mario-jump { animation:marioJump 0.42s cubic-bezier(0.4,0,0.6,1); }
+    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(-120px)} }
+    .mario-ground { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(180deg,#52A024 0%,#6BC42A 22%,#8B6914 22%,#A07830 100%); pointer-events:none; }
+    .mario-ground::before { content:''; position:absolute; top:0; left:0; right:0; height:22px; background:repeating-linear-gradient(90deg,transparent 0px,transparent 32px,rgba(0,0,0,0.12) 32px,rgba(0,0,0,0.12) 34px); }
+    .click-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; font-weight:700; font-size:0.88rem; padding:7px 20px; border-radius:20px; pointer-events:none; animation:blink 1.6s ease-in-out infinite; }
 
-    /* ── ALL SCREENS ── */
-    .screen {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .screen.off { display: none; }
+    /* ── STORY ── */
+    .story-screen { background:linear-gradient(180deg,#1a2a44 0%,#293d5c 55%,#1e2d44 100%); overflow:hidden; }
+    .story-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .story-text { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.6rem,5.5vw,3.2rem); color:white; text-align:center; line-height:1.45; padding:0 40px; text-shadow:2px 2px 0 rgba(0,0,0,0.35); animation:fadeUp 0.5s ease forwards; position:relative; z-index:2; }
+    .story-ground { position:absolute; bottom:0; left:0; right:0; height:90px; background:#0d1a0d; pointer-events:none; }
+    .story-ground::before { content:''; position:absolute; top:-30px; left:0; right:0; height:32px; background:#0d1a0d; clip-path:polygon(0% 100%,4% 0%,8% 80%,12% 20%,16% 60%,20% 0%,25% 70%,30% 10%,35% 80%,40% 0%,45% 65%,50% 5%,55% 75%,60% 15%,65% 55%,70% 0%,75% 80%,80% 10%,85% 70%,90% 0%,95% 65%,100% 20%,100% 100%); }
+    .story-click-hint { position:absolute; bottom:26px; color:rgba(255,255,255,0.42); font-size:0.82rem; animation:blink 1.6s ease-in-out infinite; z-index:2; }
 
-    /* ════════════════════════════════
-       SCREEN 1 · MARIO INTRO
-    ════════════════════════════════ */
-    #s-mario {
-      background: #5C94FC;
-      overflow: hidden;
-    }
+    /* ── CLOSED RESTAURANT ── */
+    .restaurant { position:absolute; bottom:88px; right:80px; z-index:6; pointer-events:none; display:flex; flex-direction:column; align-items:center; }
+    .rest-roof { width:0; height:0; border-left:58px solid transparent; border-right:58px solid transparent; border-bottom:28px solid #3a2a1a; }
+    .rest-body { width:100px; height:118px; background:#2a2535; border:3px solid #4a4055; border-top:none; display:flex; flex-direction:column; align-items:center; padding:8px 6px 0; gap:7px; }
+    .rest-sign { background:#CC0000; color:white; font-size:0.6rem; font-weight:800; padding:3px 7px; border-radius:3px; white-space:nowrap; letter-spacing:0.5px; }
+    .rest-wins { display:flex; gap:10px; }
+    .rest-win { width:26px; height:24px; background:#1a1a2e; border:2px solid #555; border-radius:2px; }
+    .rest-win.dim { background:rgba(255,200,80,0.08); }
+    .rest-door { width:30px; height:38px; background:#111; border:2px solid #555; border-radius:3px 3px 0 0; display:flex; align-items:center; justify-content:center; }
+    .rest-x { color:#CC0000; font-size:1.1rem; font-weight:900; }
 
-    /* Sky clouds */
-    .cloud {
-      position: absolute;
-      background: white;
-      border-radius: 40px;
-      pointer-events: none;
-    }
-    .cloud::before, .cloud::after {
-      content: ''; position: absolute;
-      background: white; border-radius: 50%;
-    }
-    .cl1 { width: 110px; height: 36px; top: 15%; left: 8%;  animation: cdrift 9s ease-in-out infinite; }
-    .cl1::before { width: 50px; height: 50px; top: -22px; left: 12px; }
-    .cl1::after  { width: 38px; height: 38px; top: -16px; left: 50px; }
-    .cl2 { width: 140px; height: 44px; top: 10%; left: 45%; animation: cdrift 12s ease-in-out infinite reverse; }
-    .cl2::before { width: 62px; height: 62px; top: -28px; left: 18px; }
-    .cl2::after  { width: 48px; height: 48px; top: -22px; left: 68px; }
-    .cl3 { width: 90px;  height: 28px; top: 22%; right: 10%; animation: cdrift 10s ease-in-out infinite; }
-    .cl3::before { width: 40px; height: 40px; top: -18px; left: 10px; }
-    .cl3::after  { width: 32px; height: 32px; top: -14px; left: 40px; }
-    @keyframes cdrift {
-      0%, 100% { transform: translateX(0); }
-      50%       { transform: translateX(16px); }
-    }
+    /* ── CHOICE ── */
+    #s-choice { background:linear-gradient(135deg,#FFF9F0 0%,#FFF0F9 100%); cursor:default; }
+    .choice-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.1rem,3vw,1.7rem); color:#2D2D2D; margin-bottom:36px; text-align:center; animation:fadeUp 0.5s ease forwards; }
+    .choice-row { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; animation:fadeUp 0.5s ease 0.1s both; }
+    .c-btn { padding:20px 38px; font-family:'Black Han Sans',sans-serif; font-size:clamp(0.9rem,2.3vw,1.3rem); border:4px solid #2D2D2D; border-radius:16px; cursor:pointer; box-shadow:6px 6px 0 #2D2D2D; transition:transform 0.12s,box-shadow 0.12s; }
+    .c-btn:hover  { transform:translate(-2px,-2px); box-shadow:8px 8px 0 #2D2D2D; }
+    .c-btn:active { transform:translate(2px,2px);   box-shadow:3px 3px 0 #2D2D2D; }
+    .c-btn-a { background:#4FC3F7; color:white; }
+    .c-btn-b { background:#FF6B9D; color:white; }
+    .c-btn-survey { background:#9B72CF; color:white; margin-top:16px; display:block; width:100%; text-align:center; }
 
-    /* Mario title */
-    .mario-title {
-      position: absolute;
-      top: 36px; left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(1.4rem, 4vw, 2.2rem);
-      color: white;
-      text-shadow: 3px 3px 0 rgba(0,0,0,0.25);
-      white-space: nowrap;
-      pointer-events: none;
-    }
-    .mario-title .tl { color: #FFD54F; }
+    /* ── SCENE ── */
+    .scene-screen { background:linear-gradient(180deg,#1e2d44 0%,#2a3d5c 45%,#344d6e 100%); overflow:hidden; }
+    .scene-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+    .scene-ground { position:absolute; bottom:0; left:0; right:0; height:110px; background:#0a140a; pointer-events:none; }
+    .scene-ground::before { content:''; position:absolute; top:-40px; left:0; right:0; height:42px; background:#0a140a; clip-path:polygon(0% 100%,3% 10%,6% 70%,9% 0%,13% 60%,17% 5%,21% 80%,25% 20%,29% 65%,33% 0%,37% 75%,41% 15%,45% 50%,49% 0%,53% 80%,57% 10%,61% 60%,65% 5%,69% 75%,73% 0%,77% 65%,81% 20%,85% 80%,89% 0%,93% 55%,97% 30%,100% 70%,100% 100%); }
+    .scene-label { position:absolute; top:28px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.14); color:white; font-family:'Black Han Sans',sans-serif; font-size:1.05rem; padding:7px 22px; border-radius:20px; border:2px solid rgba(255,255,255,0.28); pointer-events:none; z-index:10; }
+    .scene-back-hint { position:absolute; bottom:120px; color:rgba(255,255,255,0.38); font-size:0.82rem; animation:blink 1.6s ease-in-out infinite; z-index:10; pointer-events:none; }
+    .puddle { position:absolute; bottom:108px; border-radius:50%; background:rgba(100,160,220,0.25); animation:puddleShimmer 2s ease-in-out infinite; pointer-events:none; }
+    @keyframes puddleShimmer { 0%,100%{opacity:0.25} 50%{opacity:0.45} }
+    .thunder { position:absolute; inset:0; background:white; opacity:0; pointer-events:none; z-index:50; }
+    .thunder.flash { animation:thunderFlash 0.3s ease-out forwards; }
+    @keyframes thunderFlash { 0%{opacity:0.35} 100%{opacity:0} }
 
-    /* Hit counter */
-    .hit-ctr {
-      position: absolute;
-      top: 28px; right: 28px;
-      background: rgba(0,0,0,0.55);
-      color: white;
-      font-weight: 800;
-      font-size: 1.15rem;
-      padding: 7px 16px;
-      border-radius: 20px;
-      pointer-events: none;
-    }
+    /* ── SURVEY ── */
+    #s-survey { background:linear-gradient(135deg,#F5EEFF 0%,#FFF0F9 100%); cursor:default; }
+    .survey-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.2rem,3.5vw,2rem); color:#2D2D2D; text-align:center; margin-bottom:12px; animation:fadeUp 0.5s ease forwards; }
+    .survey-sub { font-size:0.9rem; color:#888; margin-bottom:36px; text-align:center; animation:fadeUp 0.5s ease 0.1s both; }
+    .survey-opts { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; margin-bottom:28px; }
+    .s-opt { padding:20px 40px; font-family:'Black Han Sans',sans-serif; font-size:clamp(1rem,2.5vw,1.4rem); border:4px solid #2D2D2D; border-radius:16px; cursor:pointer; box-shadow:6px 6px 0 #2D2D2D; transition:transform 0.12s,box-shadow 0.12s,background 0.2s; }
+    .s-opt:hover  { transform:translate(-2px,-2px); box-shadow:8px 8px 0 #2D2D2D; }
+    .s-opt:active { transform:translate(2px,2px);   box-shadow:3px 3px 0 #2D2D2D; }
+    .s-opt-a { background:#4FC3F7; color:white; }
+    .s-opt-b { background:#FF6B9D; color:white; }
+    .s-opt.selected { transform:translate(3px,3px); box-shadow:2px 2px 0 #2D2D2D; opacity:0.7; }
+    .survey-result-btn { background:#9B72CF; color:white; border:4px solid #2D2D2D; border-radius:16px; padding:16px 36px; font-family:'Black Han Sans',sans-serif; font-size:1.1rem; cursor:pointer; box-shadow:6px 6px 0 #2D2D2D; transition:transform 0.12s,box-shadow 0.12s; opacity:0; pointer-events:none; transition:opacity 0.4s ease,transform 0.12s,box-shadow 0.12s; }
+    .survey-result-btn.show { opacity:1; pointer-events:auto; }
+    .survey-result-btn:hover  { transform:translate(-2px,-2px); box-shadow:8px 8px 0 #2D2D2D; }
+    .survey-result-btn:active { transform:translate(2px,2px); box-shadow:3px 3px 0 #2D2D2D; }
 
-    /* Brick */
-    #brick-wrap {
-      position: absolute;
-      bottom: 268px;
-      left: 50%;
-      transform: translateX(-50%);
-      pointer-events: none;
-    }
-    #brick-svg { display: block; image-rendering: pixelated; }
-    .brick-bump { animation: brickBump 0.2s ease-out; }
-    @keyframes brickBump {
-      0%, 100% { transform: translateY(0); }
-      45%       { transform: translateY(-10px); }
-    }
+    /* ── RESULTS ── */
+    #s-results { background:linear-gradient(135deg,#F5EEFF 0%,#FFF0F9 100%); cursor:default; }
+    .results-title { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.3rem,4vw,2.2rem); color:#2D2D2D; margin-bottom:10px; text-align:center; animation:fadeUp 0.5s ease forwards; }
+    .results-sub { font-size:0.88rem; color:#999; margin-bottom:40px; text-align:center; }
+    .bar-wrap { width:min(500px,88vw); margin-bottom:34px; }
+    .bar-row { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+    .bar-label { font-family:'Black Han Sans',sans-serif; font-size:1rem; width:60px; flex-shrink:0; }
+    .bar-track { flex:1; height:28px; background:#E8E0F5; border-radius:20px; overflow:hidden; border:2px solid #2D2D2D; }
+    .bar-fill { height:100%; border-radius:18px; width:0; transition:width 1.2s cubic-bezier(0.4,0,0.2,1); display:flex; align-items:center; justify-content:flex-end; padding-right:8px; }
+    .bar-fill-a { background:#4FC3F7; }
+    .bar-fill-b { background:#FF6B9D; }
+    .bar-pct { font-weight:800; font-size:0.85rem; color:white; }
+    .bar-num { font-family:'Black Han Sans',sans-serif; font-size:1.1rem; width:48px; flex-shrink:0; text-align:right; }
+    .lovability-btn { background:#FF6B9D; color:white; border:4px solid #2D2D2D; border-radius:18px; padding:18px 40px; font-family:'Black Han Sans',sans-serif; font-size:clamp(1rem,2.5vw,1.3rem); cursor:pointer; box-shadow:6px 6px 0 #2D2D2D; transition:transform 0.12s,box-shadow 0.12s; animation:fadeUp 0.6s ease 1.8s both; }
+    .lovability-btn:hover  { transform:translate(-2px,-2px); box-shadow:8px 8px 0 #2D2D2D; }
+    .lovability-btn:active { transform:translate(2px,2px); box-shadow:3px 3px 0 #2D2D2D; }
 
-    /* Heart pop */
-    .heart-pop {
-      position: absolute;
-      font-size: 2rem;
-      pointer-events: none;
-      animation: heartFly 0.9s ease-out forwards;
-      left: 50%; transform: translateX(-50%);
-      top: -10px;
-      z-index: 20;
-    }
-    @keyframes heartFly {
-      0%   { transform: translateX(-50%) translateY(0) scale(0.4); opacity: 1; }
-      30%  { opacity: 1; }
-      100% { transform: translateX(-50%) translateY(-110px) scale(1.6); opacity: 0; }
-    }
+    /* ── PHONE SCREEN ── */
+    #s-phone { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); cursor:default; }
+    .phone-device { width:260px; height:520px; background:#111; border-radius:36px; border:6px solid #333; box-shadow:0 0 0 2px #555, 0 30px 80px rgba(0,0,0,0.8); position:relative; overflow:hidden; }
+    .phone-screen-inner { position:absolute; inset:6px; border-radius:28px; overflow:hidden; background:#000; }
+    /* Wallpaper */
+    .phone-wallpaper { position:absolute; inset:0; background:linear-gradient(180deg,#87CEEB 0%,#B8D9F5 28%,#C8E6C9 65%,#388E3C 100%); }
+    /* Wallpaper details */
+    .wp-sun { position:absolute; top:40px; right:50px; width:48px; height:48px; border-radius:50%; background:radial-gradient(circle,#FFF176 40%,#FFD54F 70%,rgba(255,213,79,0) 100%); box-shadow:0 0 20px #FFD54F; }
+    .wp-cloud { position:absolute; background:rgba(255,255,255,0.85); border-radius:20px; }
+    .wp-cloud::before,.wp-cloud::after { content:''; position:absolute; background:rgba(255,255,255,0.85); border-radius:50%; }
+    .wpc1 { width:60px; height:20px; top:60px; left:20px; }
+    .wpc1::before { width:26px; height:26px; top:-12px; left:8px; }
+    .wpc1::after  { width:20px; height:20px; top:-10px; left:28px; }
+    .wpc2 { width:80px; height:24px; top:80px; left:100px; }
+    .wpc2::before { width:34px; height:34px; top:-16px; left:10px; }
+    .wpc2::after  { width:26px; height:26px; top:-12px; left:36px; }
+    /* Status bar */
+    .phone-status { position:absolute; top:0; left:0; right:0; height:28px; display:flex; align-items:center; justify-content:space-between; padding:0 16px; z-index:10; }
+    .phone-time { font-size:0.75rem; font-weight:800; color:rgba(0,0,0,0.7); }
+    .phone-icons { font-size:0.65rem; color:rgba(0,0,0,0.6); }
+    /* Notch */
+    .phone-notch { position:absolute; top:0; left:50%; transform:translateX(-50%); width:80px; height:22px; background:#111; border-radius:0 0 14px 14px; z-index:20; }
+    /* KakaoTalk notification */
+    .kakao-notif { position:absolute; top:34px; left:8px; right:8px; background:rgba(255,255,255,0.92); border-radius:14px; padding:10px 12px; display:flex; align-items:flex-start; gap:10px; box-shadow:0 4px 16px rgba(0,0,0,0.2); backdrop-filter:blur(12px); transform:translateY(-120px); opacity:0; z-index:30; transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1), opacity 0.4s ease; }
+    .kakao-notif.arrive { transform:translateY(0); opacity:1; }
+    .kakao-icon-box { width:36px; height:36px; background:#FEE500; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.1rem; }
+    .kakao-right { flex:1; min-width:0; }
+    .kakao-app-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:2px; }
+    .kakao-app-name { font-size:0.62rem; font-weight:800; color:#888; }
+    .kakao-time-tag { font-size:0.58rem; color:#aaa; }
+    .kakao-sender { font-size:0.72rem; font-weight:800; color:#2D2D2D; }
+    .kakao-msg-text { font-size:0.7rem; color:#444; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    /* Phone home button area */
+    .phone-home-bar { position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:80px; height:4px; background:rgba(255,255,255,0.3); border-radius:2px; }
+    /* Lock icons etc */
+    .phone-hint { position:absolute; bottom:140px; left:50%; transform:translateX(-50%); white-space:nowrap; color:rgba(255,255,255,0.5); font-size:0.75rem; text-align:center; animation:blink 1.6s ease-in-out infinite; }
 
-    /* Mario character */
-    #mario-char {
-      position: absolute;
-      bottom: 80px;
-      left: calc(50% - 32px);
-      pointer-events: none;
-    }
-    #mario-svg { display: block; image-rendering: pixelated; }
-    .mario-jump { animation: marioJump 0.42s cubic-bezier(0.4,0,0.6,1); }
-    @keyframes marioJump {
-      0%, 100% { transform: translateY(0); }
-      42%, 58% { transform: translateY(-120px); }
-    }
-
-    /* Ground */
-    .mario-ground {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 80px;
-      background: linear-gradient(180deg, #52A024 0%, #6BC42A 22%, #8B6914 22%, #A07830 100%);
-      pointer-events: none;
-    }
-    .mario-ground::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; height: 22px;
-      background: repeating-linear-gradient(90deg,
-        transparent 0px, transparent 32px,
-        rgba(0,0,0,0.12) 32px, rgba(0,0,0,0.12) 34px
-      );
-    }
-
-    /* Click hint */
-    .click-hint {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.5);
-      color: white;
-      font-weight: 700;
-      font-size: 0.88rem;
-      padding: 7px 20px;
-      border-radius: 20px;
-      pointer-events: none;
-      animation: blink 1.6s ease-in-out infinite;
-    }
-    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.45} }
-
-    /* ════════════════════════════════
-       SCREENS 2–4 · STORY
-    ════════════════════════════════ */
-    .story-screen {
-      background: linear-gradient(180deg, #1a2a44 0%, #293d5c 55%, #1e2d44 100%);
-      overflow: hidden;
-    }
-
-    .story-rain {
-      position: absolute; inset: 0;
-      pointer-events: none; overflow: hidden;
-    }
-
-    .story-text {
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(1.6rem, 5.5vw, 3.2rem);
-      color: white;
-      text-align: center;
-      line-height: 1.45;
-      padding: 0 40px;
-      text-shadow: 2px 2px 0 rgba(0,0,0,0.35);
-      animation: fadeUp 0.5s ease forwards;
-      position: relative;
-      z-index: 2;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Ground silhouette for story */
-    .story-ground {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      height: 90px;
-      background: #0d1a0d;
-      pointer-events: none;
-    }
-    .story-ground::before {
-      content: '';
-      position: absolute;
-      top: -30px; left: 0; right: 0; height: 32px;
-      background: #0d1a0d;
-      clip-path: polygon(0% 100%, 4% 0%, 8% 80%, 12% 20%, 16% 60%, 20% 0%, 25% 70%, 30% 10%, 35% 80%, 40% 0%, 45% 65%, 50% 5%, 55% 75%, 60% 15%, 65% 55%, 70% 0%, 75% 80%, 80% 10%, 85% 70%, 90% 0%, 95% 65%, 100% 20%, 100% 100%);
-    }
-
-    .story-click-hint {
-      position: absolute; bottom: 26px;
-      color: rgba(255,255,255,0.42);
-      font-size: 0.82rem;
-      animation: blink 1.6s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    /* Rain drops (shared style via JS) */
-    @keyframes rainFall {
-      from { top: -30px; }
-      to   { top: 110%; }
-    }
-
-    /* ════════════════════════════════
-       SCREEN 5 · CHOICE
-    ════════════════════════════════ */
-    #s-choice {
-      background: linear-gradient(135deg, #FFF9F0 0%, #FFF0F9 100%);
-      cursor: default;
-    }
-
-    .choice-title {
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(1.1rem, 3vw, 1.7rem);
-      color: #2D2D2D;
-      margin-bottom: 44px;
-      text-align: center;
-      animation: fadeUp 0.5s ease forwards;
-    }
-
-    .choice-row {
-      display: flex; gap: 22px;
-      flex-wrap: wrap; justify-content: center;
-      animation: fadeUp 0.5s ease 0.15s both;
-    }
-
-    .c-btn {
-      padding: 22px 42px;
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: clamp(0.95rem, 2.5vw, 1.4rem);
-      border: 4px solid #2D2D2D;
-      border-radius: 18px;
-      cursor: pointer;
-      box-shadow: 6px 6px 0 #2D2D2D;
-      transition: transform 0.12s, box-shadow 0.12s;
-      background: white;
-    }
-    .c-btn:hover  { transform: translate(-2px,-2px); box-shadow: 8px 8px 0 #2D2D2D; }
-    .c-btn:active { transform: translate(2px,2px);   box-shadow: 3px 3px 0 #2D2D2D; }
-    .c-btn-a { background: #4FC3F7; color: white; }
-    .c-btn-b { background: #FF6B9D; color: white; }
-
-    /* ════════════════════════════════
-       SCREENS 6–7 · SCENES A & B
-    ════════════════════════════════ */
-    .scene-screen {
-      background: linear-gradient(180deg, #1e2d44 0%, #2a3d5c 45%, #344d6e 100%);
-      overflow: hidden;
-    }
-
-    .scene-rain {
-      position: absolute; inset: 0;
-      pointer-events: none; overflow: hidden;
-    }
-
-    .scene-ground {
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 110px; background: #0a140a;
-      pointer-events: none;
-    }
-    .scene-ground::before {
-      content: '';
-      position: absolute;
-      top: -40px; left: 0; right: 0; height: 42px;
-      background: #0a140a;
-      clip-path: polygon(0% 100%, 3% 10%, 6% 70%, 9% 0%, 13% 60%, 17% 5%, 21% 80%, 25% 20%, 29% 65%, 33% 0%, 37% 75%, 41% 15%, 45% 50%, 49% 0%, 53% 80%, 57% 10%, 61% 60%, 65% 5%, 69% 75%, 73% 0%, 77% 65%, 81% 20%, 85% 80%, 89% 0%, 93% 55%, 97% 30%, 100% 70%, 100% 100%);
-    }
-
-    .scene-label {
-      position: absolute;
-      top: 28px; left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,0.14);
-      color: white;
-      font-family: 'Black Han Sans', sans-serif;
-      font-size: 1.05rem;
-      padding: 7px 22px;
-      border-radius: 20px;
-      border: 2px solid rgba(255,255,255,0.28);
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    .scene-back-hint {
-      position: absolute; bottom: 120px;
-      color: rgba(255,255,255,0.38);
-      font-size: 0.82rem;
-      animation: blink 1.6s ease-in-out infinite;
-      z-index: 10;
-      pointer-events: none;
-    }
-
-    /* Puddle shimmer */
-    .puddle {
-      position: absolute;
-      bottom: 108px;
-      border-radius: 50%;
-      background: rgba(100,160,220,0.25);
-      animation: puddleShimmer 2s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes puddleShimmer {
-      0%,100% { opacity: 0.25; }
-      50%      { opacity: 0.45; }
-    }
-
-    /* Thunder flash */
-    .thunder {
-      position: absolute; inset: 0;
-      background: white;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 50;
-    }
-    .thunder.flash {
-      animation: thunderFlash 0.3s ease-out forwards;
-    }
-    @keyframes thunderFlash {
-      0%  { opacity: 0.35; }
-      100%{ opacity: 0; }
-    }
-
-    /* Transition overlay */
-    #transition {
-      position: fixed; inset: 0;
-      background: black;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 999;
-      transition: opacity 0.35s ease;
-    }
-    #transition.fade-in  { opacity: 1; }
-    #transition.fade-out { opacity: 0; }
+    /* ── TRANSITION ── */
+    #transition { position:fixed; inset:0; background:black; opacity:0; pointer-events:none; z-index:999; transition:opacity 0.3s ease; }
+    #transition.fade-in { opacity:1; }
   </style>
 </head>
 <body>
 
-<!-- ══ TRANSITION OVERLAY ══ -->
 <div id="transition"></div>
 
-<!-- ══════════════════════════════════
-     SCREEN 1 · MARIO INTRO
-══════════════════════════════════ -->
+<!-- ══ MARIO ══ -->
 <div id="s-mario" class="screen">
   <div class="cloud cl1"></div>
   <div class="cloud cl2"></div>
   <div class="cloud cl3"></div>
-
-  <div class="mario-title">
-    <span class="tl">~</span>김종국 사랑스러워<span class="tl">~</span>
-  </div>
-
+  <div class="mario-title"><span class="tl">~</span>김종국 사랑스러워<span class="tl">~</span></div>
   <div class="hit-ctr" id="hit-ctr">💗 0 / 3</div>
-
-  <!-- Brick block -->
   <div id="brick-wrap">
     <svg id="brick-svg" width="72" height="72" viewBox="0 0 16 16">
       <rect width="16" height="16" fill="#C84B0F"/>
@@ -393,60 +188,41 @@
       <rect x="12" y="10" width="3" height="1" fill="#E06820"/>
     </svg>
   </div>
-
-  <!-- Mario character -->
   <div id="mario-char">
     <svg id="mario-svg" width="72" height="90" viewBox="0 0 16 20">
-      <!-- Hat -->
       <rect x="3" y="0" width="8" height="1" fill="#CC0000"/>
       <rect x="1" y="1" width="11" height="2" fill="#CC0000"/>
-      <!-- Hair -->
       <rect x="1" y="3" width="5" height="1" fill="#5C3100"/>
       <rect x="6" y="3" width="4" height="1" fill="#CC0000"/>
-      <!-- Face -->
       <rect x="1" y="4" width="12" height="3" fill="#FFCBA4"/>
-      <!-- Eye -->
       <rect x="5" y="5" width="2" height="1" fill="#000"/>
-      <!-- Nose -->
       <rect x="7" y="6" width="3" height="1" fill="#FFCBA4"/>
-      <!-- Mustache -->
       <rect x="2" y="7" width="3" height="1" fill="#5C3100"/>
       <rect x="6" y="7" width="5" height="1" fill="#5C3100"/>
-      <!-- Shirt -->
       <rect x="3" y="8" width="10" height="1" fill="#CC0000"/>
-      <!-- Overalls bib -->
       <rect x="2" y="9" width="12" height="4" fill="#0000BB"/>
       <rect x="4" y="9" width="8" height="3" fill="#CC0000"/>
-      <!-- Overall straps -->
       <rect x="4" y="8" width="2" height="1" fill="#0000BB"/>
       <rect x="10" y="8" width="2" height="1" fill="#0000BB"/>
-      <!-- Buttons -->
       <rect x="5" y="10" width="1" height="1" fill="#FFCBA4"/>
       <rect x="10" y="10" width="1" height="1" fill="#FFCBA4"/>
-      <!-- Arms -->
       <rect x="0" y="9" width="2" height="4" fill="#FFCBA4"/>
       <rect x="14" y="9" width="2" height="4" fill="#FFCBA4"/>
-      <!-- Hands -->
       <rect x="0" y="13" width="2" height="1" fill="#CC0000"/>
       <rect x="14" y="13" width="2" height="1" fill="#CC0000"/>
-      <!-- Legs -->
       <rect x="2" y="13" width="5" height="3" fill="#CC0000"/>
       <rect x="9" y="13" width="5" height="3" fill="#CC0000"/>
-      <!-- Shoes -->
       <rect x="1" y="16" width="6" height="2" fill="#5C3100"/>
       <rect x="8" y="16" width="7" height="2" fill="#5C3100"/>
       <rect x="0" y="17" width="2" height="1" fill="#5C3100"/>
       <rect x="14" y="17" width="2" height="1" fill="#5C3100"/>
     </svg>
   </div>
-
   <div class="mario-ground"></div>
   <div class="click-hint">화면을 클릭하세요! (3번)</div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 2 · STORY 1
-══════════════════════════════════ -->
+<!-- ══ STORY 1 ══ -->
 <div id="s-story1" class="screen story-screen off">
   <div class="story-rain" id="rain-s1"></div>
   <div class="story-ground"></div>
@@ -454,19 +230,24 @@
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 3 · STORY 2
-══════════════════════════════════ -->
+<!-- ══ STORY 2 ══ -->
 <div id="s-story2" class="screen story-screen off">
   <div class="story-rain" id="rain-s2"></div>
   <div class="story-ground"></div>
-  <p class="story-text">헉!<br>가기로 했던 맛집이 닫았다!</p>
+  <!-- Closed restaurant in story too -->
+  <div class="restaurant">
+    <div class="rest-roof"></div>
+    <div class="rest-body">
+      <div class="rest-sign">🍜 영업 종료</div>
+      <div class="rest-wins"><div class="rest-win"></div><div class="rest-win"></div></div>
+      <div class="rest-door"><div class="rest-x">✕</div></div>
+    </div>
+  </div>
+  <p class="story-text">헉!<br>가기로 했던 맛집이<br>문을 닫았다...</p>
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 4 · STORY 3
-══════════════════════════════════ -->
+<!-- ══ STORY 3 ══ -->
 <div id="s-story3" class="screen story-screen off">
   <div class="story-rain" id="rain-s3"></div>
   <div class="story-ground"></div>
@@ -474,37 +255,114 @@
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 5 · CHOICE
-══════════════════════════════════ -->
+<!-- ══ CHOICE ══ -->
 <div id="s-choice" class="screen off">
   <p class="choice-title">어떤 상황이 펼쳐질까요?</p>
   <div class="choice-row">
     <button class="c-btn c-btn-a" id="btn-a">💙 A상황 보러가기</button>
     <button class="c-btn c-btn-b" id="btn-b">💗 B상황 보러가기</button>
+    <button class="c-btn c-btn-survey" id="btn-survey">📊 설문조사 참여하기</button>
   </div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 6 · SCENE A
-══════════════════════════════════ -->
+<!-- ══ SCENE A ══ -->
 <div id="s-scene-a" class="screen scene-screen off">
   <div class="thunder" id="thunder-a"></div>
   <div class="scene-rain" id="rain-sa"></div>
+  <div class="restaurant">
+    <div class="rest-roof"></div>
+    <div class="rest-body">
+      <div class="rest-sign">🍜 영업 종료</div>
+      <div class="rest-wins"><div class="rest-win"></div><div class="rest-win dim"></div></div>
+      <div class="rest-door"><div class="rest-x">✕</div></div>
+    </div>
+  </div>
   <div class="scene-ground"></div>
   <div class="scene-label">A 상황</div>
   <div class="scene-back-hint">화면을 클릭하면 돌아갑니다</div>
 </div>
 
-<!-- ══════════════════════════════════
-     SCREEN 7 · SCENE B
-══════════════════════════════════ -->
+<!-- ══ SCENE B ══ -->
 <div id="s-scene-b" class="screen scene-screen off">
   <div class="thunder" id="thunder-b"></div>
   <div class="scene-rain" id="rain-sb"></div>
+  <div class="restaurant">
+    <div class="rest-roof"></div>
+    <div class="rest-body">
+      <div class="rest-sign">🍜 영업 종료</div>
+      <div class="rest-wins"><div class="rest-win dim"></div><div class="rest-win"></div></div>
+      <div class="rest-door"><div class="rest-x">✕</div></div>
+    </div>
+  </div>
   <div class="scene-ground"></div>
   <div class="scene-label">B 상황</div>
   <div class="scene-back-hint">화면을 클릭하면 돌아갑니다</div>
+</div>
+
+<!-- ══ SURVEY ══ -->
+<div id="s-survey" class="screen off">
+  <p class="survey-title">A상황과 B상황 중<br>어떤 상황이 더 좋으신가요?</p>
+  <p class="survey-sub">하나를 선택해주세요</p>
+  <div class="survey-opts">
+    <button class="s-opt s-opt-a" id="s-opt-a" onclick="vote('a')">💙 A상황</button>
+    <button class="s-opt s-opt-b" id="s-opt-b" onclick="vote('b')">💗 B상황</button>
+  </div>
+  <button class="survey-result-btn" id="survey-go" onclick="go('s-results')">📊 설문조사 결과 보러가기</button>
+</div>
+
+<!-- ══ RESULTS ══ -->
+<div id="s-results" class="screen off">
+  <p class="results-title">📊 설문조사 결과</p>
+  <p class="results-sub" style="animation:fadeUp 0.5s ease 0.2s both">총 응답자 중 어떤 상황을 원했을까요?</p>
+  <div class="bar-wrap">
+    <div class="bar-row" style="animation:fadeUp 0.5s ease 0.4s both">
+      <div class="bar-label" style="color:#4FC3F7;">💙 A상황</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-a" id="bar-a"><span class="bar-pct">8%</span></div></div>
+      <div class="bar-num" style="color:#4FC3F7;">8%</div>
+    </div>
+    <div class="bar-row" style="animation:fadeUp 0.5s ease 0.55s both">
+      <div class="bar-label" style="color:#FF6B9D;">💗 B상황</div>
+      <div class="bar-track"><div class="bar-fill bar-fill-b" id="bar-b"><span class="bar-pct">92%</span></div></div>
+      <div class="bar-num" style="color:#FF6B9D;">92%</div>
+    </div>
+  </div>
+  <button class="lovability-btn" onclick="go('s-phone')">💗 러빌리티(Lovability) 발휘해보기</button>
+</div>
+
+<!-- ══ PHONE SCREEN ══ -->
+<div id="s-phone" class="screen off">
+  <div class="phone-device">
+    <div class="phone-screen-inner">
+      <!-- Wallpaper -->
+      <div class="phone-wallpaper">
+        <div class="wp-sun"></div>
+        <div class="wp-cloud wpc1"></div>
+        <div class="wp-cloud wpc2"></div>
+      </div>
+      <!-- Notch -->
+      <div class="phone-notch"></div>
+      <!-- Status bar -->
+      <div class="phone-status">
+        <span class="phone-time" id="phone-time">9:41</span>
+        <span class="phone-icons">▲ 🔋</span>
+      </div>
+      <!-- KakaoTalk notification -->
+      <div class="kakao-notif" id="kakao-notif">
+        <div class="kakao-icon-box">💬</div>
+        <div class="kakao-right">
+          <div class="kakao-app-row">
+            <span class="kakao-app-name">카카오톡</span>
+            <span class="kakao-time-tag">지금</span>
+          </div>
+          <div class="kakao-sender">민준</div>
+          <div class="kakao-msg-text">잘 잤어? 😊</div>
+        </div>
+      </div>
+      <!-- Home bar -->
+      <div class="phone-home-bar"></div>
+    </div>
+  </div>
+  <p class="phone-hint" style="margin-top:24px;">매일 아침 같은 메시지.<br>이것이 러빌리티입니다. 💗</p>
 </div>
 
 <script>
@@ -517,136 +375,125 @@
   /* ── TRANSITION ── */
   const overlay = document.getElementById('transition');
 
-  function go(nextId, delay = 0) {
+  function go(nextId, delay) {
+    delay = delay || 0;
     setTimeout(() => {
-      overlay.classList.add('fade-in');
-      overlay.style.transition = 'opacity 0.3s ease';
+      overlay.style.opacity = '1';
+      overlay.style.pointerEvents = 'auto';
       setTimeout(() => {
         showOnly(nextId);
-        overlay.classList.remove('fade-in');
-        overlay.style.transition = 'opacity 0.4s ease';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
       }, 320);
     }, delay);
   }
 
   function showOnly(id) {
-    document.querySelectorAll('.screen').forEach(s => {
-      s.id === id ? s.classList.remove('off') : s.classList.add('off');
-    });
+    document.querySelectorAll('.screen').forEach(s =>
+      s.id === id ? s.classList.remove('off') : s.classList.add('off')
+    );
     current = id;
-    // Trigger rain for screens that need it
-    const rainMap = {
-      's-story1': 'rain-s1',
-      's-story2': 'rain-s2',
-      's-story3': 'rain-s3',
-      's-scene-a': 'rain-sa',
-      's-scene-b': 'rain-sb',
-    };
-    if (rainMap[id] && !rainDone[id]) {
-      makeRain(rainMap[id], id.startsWith('s-scene'));
-      rainDone[id] = true;
-    }
-    // Add puddles to scenes
-    if ((id === 's-scene-a' || id === 's-scene-b') && !rainDone[id + '-puddles']) {
-      makePuddles(id);
-      rainDone[id + '-puddles'] = true;
-    }
-    // Thunder for scenes
-    if (id === 's-scene-a' || id === 's-scene-b') {
-      scheduleThunder(id === 's-scene-a' ? 'thunder-a' : 'thunder-b');
-    }
+    initScreen(id);
   }
 
-  /* ── RAIN GENERATOR ── */
-  function makeRain(containerId, heavy) {
-    const c = document.getElementById(containerId);
-    const count = heavy ? 80 : 50;
-    for (let i = 0; i < count; i++) {
+  function initScreen(id) {
+    const rainMap = { 's-story1':'rain-s1','s-story2':'rain-s2','s-story3':'rain-s3','s-scene-a':'rain-sa','s-scene-b':'rain-sb' };
+    if (rainMap[id] && !rainDone[id]) { makeRain(rainMap[id], id.startsWith('s-scene')); rainDone[id]=true; }
+    if ((id==='s-scene-a'||id==='s-scene-b') && !rainDone[id+'-p']) { makePuddles(id); rainDone[id+'-p']=true; }
+    if (id==='s-scene-a') scheduleThunder('thunder-a');
+    if (id==='s-scene-b') scheduleThunder('thunder-b');
+    if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); }
+    if (id==='s-phone') { updateTime(); setTimeout(()=>{ document.getElementById('kakao-notif').classList.add('arrive'); },1200); }
+  }
+
+  /* ── RAIN ── */
+  function makeRain(cid, heavy) {
+    const c = document.getElementById(cid);
+    const n = heavy ? 80 : 50;
+    for (let i=0;i<n;i++) {
       const d = document.createElement('div');
-      const dur = 0.22 + Math.random() * (heavy ? 0.28 : 0.38);
-      const h   = heavy ? (18 + Math.random() * 22) : (10 + Math.random() * 16);
-      const op  = heavy ? (0.55 + Math.random() * 0.35) : (0.4 + Math.random() * 0.3);
-      d.style.cssText = `
-        position:absolute;
-        left:${Math.random() * 100}%;
-        width:${heavy ? 2 : 1.5}px;
-        height:${h}px;
-        background:rgba(150,200,255,${op});
-        animation:rainFall ${dur}s linear infinite;
-        animation-delay:${Math.random() * 1}s;
-        transform:skewX(-8deg);
-      `;
+      const dur = 0.22 + Math.random()*(heavy?0.28:0.38);
+      const h   = heavy ? 18+Math.random()*22 : 10+Math.random()*16;
+      const op  = heavy ? 0.55+Math.random()*0.35 : 0.4+Math.random()*0.3;
+      d.style.cssText = `position:absolute;left:${Math.random()*100}%;width:${heavy?2:1.5}px;height:${h}px;background:rgba(150,200,255,${op});animation:rainFall ${dur}s linear infinite;animation-delay:${Math.random()}s;transform:skewX(-8deg);`;
       c.appendChild(d);
     }
   }
 
-  function makePuddles(screenId) {
-    const scr = document.getElementById(screenId);
-    const positions = [15, 32, 50, 68, 82];
-    positions.forEach(pct => {
-      const p = document.createElement('div');
-      p.className = 'puddle';
-      const w = 40 + Math.random() * 70;
-      p.style.cssText = `left:${pct}%;width:${w}px;height:${8+Math.random()*8}px;transform:translateX(-50%);animation-delay:${Math.random()*2}s;`;
-      scr.appendChild(p);
+  function makePuddles(sid) {
+    const s = document.getElementById(sid);
+    [14,30,52,70,85].forEach(p => {
+      const el = document.createElement('div');
+      el.className='puddle';
+      const w=40+Math.random()*70;
+      el.style.cssText=`left:${p}%;width:${w}px;height:${8+Math.random()*8}px;transform:translateX(-50%);animation-delay:${Math.random()*2}s;`;
+      s.appendChild(el);
     });
   }
 
-  /* ── THUNDER ── */
+  let thunderTimers = {};
   function scheduleThunder(id) {
-    const delay = 3000 + Math.random() * 5000;
-    setTimeout(() => {
-      const el = document.getElementById(id);
-      if (!el) return;
+    clearTimeout(thunderTimers[id]);
+    thunderTimers[id] = setTimeout(()=>{
+      const el=document.getElementById(id);
+      if(!el||el.closest('.screen').classList.contains('off')) return;
       el.classList.add('flash');
-      setTimeout(() => { el.classList.remove('flash'); scheduleThunder(id); }, 350);
-    }, delay);
+      setTimeout(()=>{ el.classList.remove('flash'); scheduleThunder(id); },350);
+    }, 3000+Math.random()*5000);
   }
 
   /* ── MARIO ── */
   function marioHit() {
-    if (marioLocked || marioHits >= 3) return;
-    marioLocked = true;
-    marioHits++;
-
-    // Jump animation
-    const mario = document.getElementById('mario-char');
+    if (marioLocked||marioHits>=3) return;
+    marioLocked=true; marioHits++;
+    const mario=document.getElementById('mario-char');
     mario.classList.add('mario-jump');
-
-    // Brick bump
-    const brickSvg = document.getElementById('brick-svg');
-    brickSvg.classList.add('brick-bump');
-
-    // Heart
+    const bsv=document.getElementById('brick-svg');
+    bsv.classList.add('brick-bump');
     setTimeout(spawnHeart, 210);
-
-    // Update counter
-    document.getElementById('hit-ctr').textContent = `💗 ${marioHits} / 3`;
-
-    setTimeout(() => {
+    document.getElementById('hit-ctr').textContent=`💗 ${marioHits} / 3`;
+    setTimeout(()=>{
       mario.classList.remove('mario-jump');
-      brickSvg.classList.remove('brick-bump');
-      marioLocked = false;
-      if (marioHits >= 3) go('s-story1', 700);
-    }, 460);
+      bsv.classList.remove('brick-bump');
+      marioLocked=false;
+      if (marioHits>=3) go('s-story1',700);
+    },460);
   }
 
   function spawnHeart() {
-    const wrap = document.getElementById('brick-wrap');
-    const h = document.createElement('div');
-    h.className = 'heart-pop';
-    h.textContent = ['💗','💖','💕'][marioHits - 1];
-    h.style.marginLeft = (Math.random() * 30 - 15) + 'px';
-    wrap.appendChild(h);
-    setTimeout(() => h.remove(), 1000);
+    const w=document.getElementById('brick-wrap');
+    const h=document.createElement('div');
+    h.className='heart-pop';
+    h.textContent=['💗','💖','💕'][marioHits-1];
+    h.style.marginLeft=(Math.random()*30-15)+'px';
+    w.appendChild(h);
+    setTimeout(()=>h.remove(),1000);
   }
 
-  /* ── CLICK HANDLER ── */
-  document.getElementById('btn-a').addEventListener('click', e => { e.stopPropagation(); go('s-scene-a'); });
-  document.getElementById('btn-b').addEventListener('click', e => { e.stopPropagation(); go('s-scene-b'); });
+  /* ── SURVEY ── */
+  function vote(which) {
+    document.getElementById('s-opt-a').classList.toggle('selected', which==='a');
+    document.getElementById('s-opt-b').classList.toggle('selected', which==='b');
+    document.getElementById('survey-go').classList.add('show');
+  }
 
-  document.addEventListener('click', () => {
-    switch (current) {
+  /* ── PHONE TIME ── */
+  function updateTime() {
+    const n=new Date();
+    const h=n.getHours().toString().padStart(2,'0');
+    const m=n.getMinutes().toString().padStart(2,'0');
+    document.getElementById('phone-time').textContent=`${h}:${m}`;
+  }
+
+  /* ── BUTTONS ── */
+  document.getElementById('btn-a').addEventListener('click', e=>{ e.stopPropagation(); go('s-scene-a'); });
+  document.getElementById('btn-b').addEventListener('click', e=>{ e.stopPropagation(); go('s-scene-b'); });
+  document.getElementById('btn-survey').addEventListener('click', e=>{ e.stopPropagation(); go('s-survey'); });
+
+  /* ── GLOBAL CLICK ── */
+  document.addEventListener('click', e=>{
+    if (e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn')) return;
+    switch(current) {
       case 's-mario':   marioHit(); break;
       case 's-story1':  go('s-story2'); break;
       case 's-story2':  go('s-story3'); break;
