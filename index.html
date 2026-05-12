@@ -208,38 +208,38 @@
     .ph-time { font-size:0.95rem; font-weight:800; color:rgba(0,0,0,0.75); }
     .ph-icons { display:flex; align-items:center; gap:5px; font-size:0.72rem; color:rgba(0,0,0,0.65); font-weight:700; }
 
-    /* Lock info */
-    .phone-lock-info { position:absolute; top:28%; left:0; right:0; text-align:center; pointer-events:none; }
-    .phone-lock-time { font-size:clamp(3.5rem,12vw,6rem); font-weight:200; color:rgba(0,0,0,0.7); line-height:1; }
-    .phone-lock-date { font-size:clamp(0.9rem,2.5vw,1.2rem); color:rgba(0,0,0,0.55); margin-top:6px; }
+    /* ── HOME SCREEN ── */
+    .home-wrap { position:absolute; inset:0; display:flex; flex-direction:column; }
+    .app-area { flex:1; display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(14px,3vw,26px); padding:clamp(60px,10vh,90px) clamp(16px,4vw,36px) 16px; align-content:start; }
+    .app-icon { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .app-icon:active .app-box { transform:scale(0.88); }
+    .app-box { width:clamp(52px,13vw,72px); height:clamp(52px,13vw,72px); border-radius:clamp(12px,3vw,18px); display:flex; align-items:center; justify-content:center; font-size:clamp(1.6rem,4.5vw,2.2rem); position:relative; transition:transform 0.1s; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
+    .app-lbl { font-size:clamp(0.6rem,1.5vw,0.72rem); color:white; text-shadow:0 1px 4px rgba(0,0,0,0.6); font-weight:700; text-align:center; }
+    .app-badge { position:absolute; top:-5px; right:-5px; background:#FF3B30; color:white; min-width:18px; height:18px; border-radius:9px; font-size:0.58rem; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid rgba(255,255,255,0.9); padding:0 3px; }
+    .kakao-box { background:#FEE500; }
+    .phone-box  { background:linear-gradient(135deg,#34C759,#30B455); }
+    .cam-box    { background:linear-gradient(135deg,#1C1C1E,#3A3A3C); }
+    .msg-box    { background:linear-gradient(135deg,#34C759,#2EB649); }
+    .map-box    { background:linear-gradient(135deg,#FF9500,#FF6B00); }
+    .photo-box  { background:linear-gradient(135deg,#FF2D55,#FF6B00,#FFD60A,#30D158,#32ADE6,#BF5AF2); }
+    .music-box  { background:linear-gradient(135deg,#FF2D55,#BF5AF2); }
+    .set-box    { background:linear-gradient(135deg,#636366,#48484A); }
+    .app-dock { height:clamp(80px,13vh,110px); margin:0 clamp(14px,3vw,24px) clamp(12px,2vh,20px); background:rgba(255,255,255,0.22); border-radius:24px; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:space-around; padding:0 16px; }
 
-    /* KakaoTalk notification (full screen style) */
-    .kt-notif-full {
-      position:absolute; top:54px; left:14px; right:14px;
-      background:rgba(28,28,28,0.85);
-      backdrop-filter:blur(24px);
-      -webkit-backdrop-filter:blur(24px);
-      border-radius:18px;
-      padding:14px 16px;
-      display:flex; align-items:center; gap:13px;
-      cursor:pointer;
-      z-index:200;
-      transform:translateY(-160px); opacity:0;
-      transition:transform 0.55s cubic-bezier(0.34,1.4,0.64,1), opacity 0.4s ease;
-      border:1px solid rgba(255,255,255,0.12);
-    }
-    .kt-notif-full.arrive { transform:translateY(0); opacity:1; }
-    .kt-notif-full:active { background:rgba(50,50,50,0.92); }
-
-    .kt-nf-icon { width:42px; height:42px; border-radius:12px; background:#FEE500; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:1.3rem; }
-    .kt-nf-body { flex:1; min-width:0; }
-    .kt-nf-toprow { display:flex; justify-content:space-between; align-items:center; margin-bottom:3px; }
-    .kt-nf-appname { font-size:0.68rem; font-weight:700; color:rgba(255,255,255,0.6); letter-spacing:0.3px; }
-    .kt-nf-timeago { font-size:0.62rem; color:rgba(255,255,255,0.45); }
-    .kt-nf-sender { font-size:0.82rem; font-weight:800; color:white; }
-    .kt-nf-msg { font-size:0.78rem; color:rgba(255,255,255,0.7); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px; }
-
-    .phone-swipe-hint { position:absolute; bottom:40px; left:0; right:0; text-align:center; color:rgba(0,0,0,0.45); font-size:0.8rem; animation:blink 2s ease-in-out infinite; pointer-events:none; }
+    /* ── KAKAO CHAT (UPDATED) ── */
+    .kt-avatar-heart { background:linear-gradient(135deg,#FF6B9D,#F06292) !important; font-size:1.1rem !important; }
+    /* Typing indicator */
+    .kt-typing-row { display:none; align-items:flex-start; gap:8px; }
+    .typing-dots { display:flex; gap:5px; align-items:center; padding:4px 2px; }
+    .typing-dots span { width:8px; height:8px; border-radius:50%; background:#BDBDBD; animation:typingBounce 1.3s ease-in-out infinite; display:inline-block; }
+    .typing-dots span:nth-child(2) { animation-delay:0.2s; }
+    .typing-dots span:nth-child(3) { animation-delay:0.4s; }
+    @keyframes typingBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-7px)} }
+    /* Dynamic message animation */
+    .kt-row-recv, .kt-row-sent { animation:msgSlide 0.38s ease both; }
+    /* Real input */
+    .kt-text-field-real { flex:1; height:38px; background:#F4F4F4; border-radius:19px; border:none; padding:0 15px; font-size:0.9rem; font-family:'Nanum Gothic',sans-serif; color:#333; outline:none; cursor:text; }
+    .kt-text-field-real:disabled { color:#999; }
 
     /* ═══════════════════════════
        KAKAOTALK CHAT
@@ -451,84 +451,76 @@
   <button class="lovability-btn" onclick="go('s-phone')">💗 러빌리티(Lovability) 발휘해보기</button>
 </div>
 
-<!-- ══ PHONE (FULL SCREEN) ══ -->
+<!-- ══ PHONE HOME SCREEN ══ -->
 <div id="s-phone" class="screen off">
-  <!-- Wallpaper -->
   <div class="phone-wp">
     <div class="wp-sun"></div>
     <div class="wp-cloud wpc1"></div>
     <div class="wp-cloud wpc2"></div>
     <div class="wp-grass"></div>
   </div>
-  <!-- Status bar -->
   <div class="phone-status">
     <span class="ph-time" id="ph-time">9:41</span>
-    <div class="ph-icons">
-      <span>▲▲▲</span><span>WiFi</span><span>🔋 100%</span>
+    <div class="ph-icons"><span>▲▲▲</span><span>WiFi</span><span>🔋</span></div>
+  </div>
+  <div class="home-wrap">
+    <div class="app-area">
+      <div class="app-icon"><div class="app-box cam-box">📷</div><span class="app-lbl">카메라</span></div>
+      <div class="app-icon"><div class="app-box photo-box">🖼️</div><span class="app-lbl">사진</span></div>
+      <div class="app-icon"><div class="app-box music-box">🎵</div><span class="app-lbl">음악</span></div>
+      <div class="app-icon"><div class="app-box set-box">⚙️</div><span class="app-lbl">설정</span></div>
+      <div class="app-icon"><div class="app-box map-box">🗺️</div><span class="app-lbl">지도</span></div>
+      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#0088cc,#0055aa)">📘</div><span class="app-lbl">네이버</span></div>
+      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#E1306C,#833AB4,#F56040)">📷</div><span class="app-lbl">인스타</span></div>
+      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#FF0000,#CC0000)">▶️</div><span class="app-lbl">유튜브</span></div>
     </div>
-  </div>
-  <!-- Lock time -->
-  <div class="phone-lock-info">
-    <div class="phone-lock-time" id="ph-lock-time">9:41</div>
-    <div class="phone-lock-date" id="ph-lock-date">2026년 5월 12일 화요일</div>
-  </div>
-  <!-- KakaoTalk Notification -->
-  <div class="kt-notif-full" id="kt-notif" onclick="go('s-kakao')">
-    <div class="kt-nf-icon">💬</div>
-    <div class="kt-nf-body">
-      <div class="kt-nf-toprow">
-        <span class="kt-nf-appname">카카오톡</span>
-        <span class="kt-nf-timeago">지금</span>
+    <!-- Dock -->
+    <div class="app-dock">
+      <div class="app-icon"><div class="app-box phone-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">📞</div><span class="app-lbl">전화</span></div>
+      <div class="app-icon" id="kakao-app-icon" style="cursor:pointer" onclick="openKakao()">
+        <div class="app-box kakao-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">
+          💬
+          <div class="app-badge">1</div>
+        </div>
+        <span class="app-lbl">카카오톡</span>
       </div>
-      <div class="kt-nf-sender">민준</div>
-      <div class="kt-nf-msg">잘 잤어? 😊</div>
+      <div class="app-icon"><div class="app-box msg-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">✉️</div><span class="app-lbl">문자</span></div>
+      <div class="app-icon"><div class="app-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px);background:linear-gradient(135deg,#0055FF,#0033CC)">🌐</div><span class="app-lbl">인터넷</span></div>
     </div>
   </div>
-  <div class="phone-swipe-hint">알림을 클릭하면 카카오톡이 열립니다</div>
 </div>
 
-<!-- ══ KAKAO CHAT ══ -->
+<!-- ══ KAKAO CHAT WITH "하트" ══ -->
 <div id="s-kakao" class="screen off">
-  <!-- Header -->
   <div class="kt-header">
-    <button class="kt-back">←</button>
-    <div class="kt-hd-avatar">민</div>
+    <button class="kt-back" onclick="go('s-phone')">←</button>
+    <div class="kt-hd-avatar kt-avatar-heart">💗</div>
     <div class="kt-hd-info">
-      <div class="kt-hd-name">민준</div>
-      <div class="kt-hd-status">마지막 접속 방금 전</div>
+      <div class="kt-hd-name">하트</div>
+      <div class="kt-hd-status" id="kt-status">채팅</div>
     </div>
     <div class="kt-hd-icons"><span>🔍</span><span>☰</span></div>
   </div>
 
-  <!-- Chat -->
   <div class="kt-chat" id="kt-chat">
-    <div class="kt-date-chip">2026년 5월 12일 화요일</div>
-    <!-- Received message -->
-    <div class="kt-row-recv">
-      <div class="kt-avatar-sm">민</div>
+    <div class="kt-date-chip" id="kt-date-chip"></div>
+    <!-- Typing indicator (hidden by default) -->
+    <div class="kt-typing-row" id="kt-typing">
+      <div class="kt-avatar-sm kt-avatar-heart">💗</div>
       <div class="kt-recv-wrap">
-        <div class="kt-sender-name">민준</div>
-        <div class="kt-recv-row">
-          <div class="kt-bubble kt-bubble-recv">잘 잤어? 😊</div>
-          <div class="kt-time">오전 7:30</div>
+        <div class="kt-sender-name">하트</div>
+        <div class="kt-bubble kt-bubble-recv" style="padding:12px 16px">
+          <div class="typing-dots"><span></span><span></span><span></span></div>
         </div>
-      </div>
-    </div>
-    <!-- Sent message -->
-    <div class="kt-row-sent">
-      <div class="kt-time">오전 7:32</div>
-      <div class="kt-sent-wrap">
-        <div class="kt-bubble kt-bubble-sent">응! 잘 잤어 😊<br>너는 벌써 일어났어?</div>
       </div>
     </div>
   </div>
 
-  <!-- Input bar -->
   <div class="kt-input-bar">
     <button class="kt-btn-plus">+</button>
-    <input class="kt-text-field" placeholder="메시지를 입력하세요" readonly />
+    <input class="kt-text-field-real" id="kt-input" placeholder="메시지를 입력하세요" />
     <button class="kt-btn-sticker">😊</button>
-    <button class="kt-btn-send">전송</button>
+    <button class="kt-btn-send" id="kt-send-btn" onclick="sendMsg()">전송</button>
   </div>
 </div>
 
@@ -560,6 +552,7 @@
     if (id==='s-scene-b') scheduleThunder('thunder-b');
     if (id==='s-results') setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600);
     if (id==='s-phone') initPhone();
+    if (id==='s-kakao') initKakao();
   }
 
   /* ── RAIN ── */
@@ -618,27 +611,126 @@
     document.getElementById('survey-go').classList.add('show');
   }
 
-  /* ── PHONE ── */
+  /* ── PHONE HOME ── */
   function initPhone() {
     const now=new Date();
     const h=now.getHours().toString().padStart(2,'0');
     const m=now.getMinutes().toString().padStart(2,'0');
-    const timeStr=`${h}:${m}`;
-    document.getElementById('ph-time').textContent=timeStr;
-    document.getElementById('ph-lock-time').textContent=timeStr;
+    document.getElementById('ph-time').textContent=`${h}:${m}`;
+  }
+  function openKakao() { go('s-kakao'); }
+
+  /* ── KAKAO CHAT ── */
+  let msgSent = false;
+
+  function initKakao() {
+    // Reset state
+    msgSent = false;
+    const chat = document.getElementById('kt-chat');
+    // Clear dynamic messages (keep typing row + date chip)
+    Array.from(chat.querySelectorAll('.kt-row-recv,.kt-row-sent')).forEach(el=>el.remove());
+    document.getElementById('kt-typing').style.display = 'none';
+    document.getElementById('kt-status').textContent = '채팅';
+    const inp = document.getElementById('kt-input');
+    inp.value = ''; inp.disabled = false;
+    document.getElementById('kt-send-btn').disabled = false;
+    // Set today's date chip
+    const now = new Date();
     const days=['일','월','화','수','목','금','토'];
-    document.getElementById('ph-lock-date').textContent=`${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
-    setTimeout(()=>document.getElementById('kt-notif').classList.add('arrive'),1200);
+    document.getElementById('kt-date-chip').textContent =
+      `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
+    // Focus input
+    setTimeout(()=>inp.focus(), 400);
+  }
+
+  function getTime() {
+    const n=new Date(); const h=n.getHours(); const m=n.getMinutes().toString().padStart(2,'0');
+    return `${h>=12?'오후':'오전'} ${(h%12||12)}:${m}`;
+  }
+
+  function appendRecv(text) {
+    const chat = document.getElementById('kt-chat');
+    const typing = document.getElementById('kt-typing');
+    const row = document.createElement('div');
+    row.className = 'kt-row-recv';
+    row.innerHTML = `
+      <div class="kt-avatar-sm kt-avatar-heart">💗</div>
+      <div class="kt-recv-wrap">
+        <div class="kt-sender-name">하트</div>
+        <div class="kt-recv-row">
+          <div class="kt-bubble kt-bubble-recv">${text.replace(/\n/g,'<br>')}</div>
+          <div class="kt-time">${getTime()}</div>
+        </div>
+      </div>`;
+    chat.insertBefore(row, typing);
+    scrollChat();
+  }
+
+  function appendSent(text) {
+    const chat = document.getElementById('kt-chat');
+    const typing = document.getElementById('kt-typing');
+    const row = document.createElement('div');
+    row.className = 'kt-row-sent';
+    row.innerHTML = `
+      <div class="kt-time">${getTime()}</div>
+      <div class="kt-bubble kt-bubble-sent">${text.replace(/\n/g,'<br>')}</div>`;
+    chat.insertBefore(row, typing);
+    scrollChat();
+  }
+
+  function showTyping(on) {
+    const t = document.getElementById('kt-typing');
+    t.style.display = on ? 'flex' : 'none';
+    document.getElementById('kt-status').textContent = on ? '하트가 입력 중...' : '채팅';
+    if(on) scrollChat();
+  }
+
+  function scrollChat() {
+    const c = document.getElementById('kt-chat');
+    setTimeout(()=>{ c.scrollTop = c.scrollHeight; }, 80);
+  }
+
+  function sendMsg() {
+    if (msgSent) return;
+    const inp = document.getElementById('kt-input');
+    const text = inp.value.trim();
+    if (!text) return;
+    msgSent = true;
+    inp.disabled = true;
+    document.getElementById('kt-send-btn').disabled = true;
+    appendSent(text);
+    inp.value = '';
+
+    // 1. 하트 types → first reply
+    setTimeout(()=>showTyping(true), 900);
+    setTimeout(()=>{
+      showTyping(false);
+      appendRecv('응 잘 들어갔어. 자기도 잘 들어갔지?\n비도 맞고 추웠을 텐데 얼른 씻고 쉬어');
+    }, 3000);
+
+    // 2. Auto-send my message
+    setTimeout(()=>{
+      appendSent('오늘 당황했을 텐데 언제나 나부터 챙겨줘서 고마워.');
+    }, 5200);
+
+    // 3. 하트 types → long reply
+    setTimeout(()=>showTyping(true), 6200);
+    setTimeout(()=>{
+      showTyping(false);
+      appendRecv('나보다 자기가 더 당황했을 텐데 먼저 사과해 줘서 고마워.\n언제 어떤 상황이 와도 내 1순위는 너야.\n미안해하지 말고 감기 걸리기 전에 얼른 따듯한 물로 씻고 와.');
+    }, 9500);
   }
 
   /* ── BUTTONS ── */
   document.getElementById('btn-a').addEventListener('click', e=>{ e.stopPropagation(); go('s-scene-a'); });
   document.getElementById('btn-b').addEventListener('click', e=>{ e.stopPropagation(); go('s-scene-b'); });
-  document.querySelector('.kt-back').addEventListener('click', e=>{ e.stopPropagation(); go('s-phone'); });
+
+  /* Enter key to send */
+  document.getElementById('kt-input').addEventListener('keydown', e=>{ if(e.key==='Enter') sendMsg(); });
 
   /* ── GLOBAL CLICK ── */
   document.addEventListener('click', e=>{
-    if(e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn,.kt-notif-full,.kt-header,.kt-input-bar')) return;
+    if(e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn,.kt-header,.kt-input-bar,.app-icon,.app-dock')) return;
     switch(current) {
       case 's-mario':   marioHit(); break;
       case 's-story1':  go('s-story2'); break;
