@@ -25,8 +25,8 @@
     /* ═══════════════════════════
        MARIO
     ═══════════════════════════ */
-    /* ── MARIO CSS SCENE ── */
-    #s-mario { background:linear-gradient(180deg,#5C94FC 0%,#5C94FC 72%,#6BA4FC 100%); overflow:hidden; }
+    /* ── MARIO REAL BG ── */
+    #s-mario { background:url('mario-real-bg.png') bottom center / 100% 100% no-repeat; overflow:hidden; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
     .screen-shake { animation:shake 0.42s ease; }
     /* Clouds */
@@ -86,13 +86,13 @@
       text-shadow: 3px 3px 0 #A03000, -3px -3px 0 #A03000, 3px -3px 0 #A03000, -3px 3px 0 #A03000, 0 4px 0 #6A1800; }
     .mario-title-sub { font-size:clamp(0.75rem,1.6vw,1rem); color:#FFD54F; text-shadow:1px 1px 0 rgba(0,0,0,0.7); margin-top:6px; letter-spacing:1px; }
     /* Brick wrap - dark bg for mortar lines */
-    #brick-wrap { position:absolute; bottom:clamp(200px,30vh,290px); left:50%; transform:translateX(-50%); pointer-events:none; background:#5C2800; border-radius:3px; }
+    #brick-wrap { position:absolute; bottom:52vh; left:50%; transform:translateX(-50%); pointer-events:none; background:#5C2800; border-radius:3px; }
     #brick-svg { display:block; image-rendering:pixelated; }
     .heart-pop { position:absolute; font-size:2rem; pointer-events:none; animation:heartFly 0.9s ease-out forwards; left:50%; transform:translateX(-50%); top:-10px; z-index:20; }
     @keyframes heartFly { 0%{transform:translateX(-50%) translateY(0) scale(0.4);opacity:1} 30%{opacity:1} 100%{transform:translateX(-50%) translateY(-110px) scale(1.6);opacity:0} }
-    #mario-char { position:absolute; bottom:90px; left:50%; transform:translateX(-50%); pointer-events:none; }
-    .mario-jump { animation:marioJump 0.48s cubic-bezier(0.4,0,0.6,1); }
-    @keyframes marioJump { 0%,100%{transform:translateX(-50%) translateY(0)} 42%,58%{transform:translateX(-50%) translateY(clamp(-140px,-20vh,-100px))} }
+    #mario-char { position:absolute; bottom:28vh; left:50%; transform:translateX(-50%); pointer-events:none; }
+    .mario-jump { animation:marioJump 0.5s cubic-bezier(0.4,0,0.6,1); }
+    @keyframes marioJump { 0%,100%{transform:translateX(-50%) translateY(0)} 42%,58%{transform:translateX(-50%) translateY(-24vh)} }
     .mario-ground { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(180deg,#52A024 0%,#6BC42A 22%,#8B6914 22%,#A07830 100%); pointer-events:none; }
     .mario-ground::before { content:''; position:absolute; top:0; left:0; right:0; height:22px; background:repeating-linear-gradient(90deg,transparent 0px,transparent 32px,rgba(0,0,0,0.12) 32px,rgba(0,0,0,0.12) 34px); }
     .click-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; font-weight:700; font-size:0.88rem; padding:7px 20px; border-radius:20px; pointer-events:none; animation:blink 1.6s ease-in-out infinite; }
@@ -100,7 +100,7 @@
     /* ═══════════════════════════
        STORY SCREENS
     ═══════════════════════════ */
-    .story-screen { background:linear-gradient(180deg,#060c14 0%,#0a1220 18%,#0f1c30 40%,#182840 65%,#1a2a44 100%); overflow:hidden; justify-content:flex-start; padding-top:10vh; }
+    .story-screen { background:url('rainy-bg.png') center/cover no-repeat; overflow:hidden; justify-content:flex-start; padding-top:10vh; }
     .story-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
     .story-text { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.6rem,5.5vw,3.2rem); color:white; text-align:center; line-height:1.45; padding:0 40px; text-shadow:2px 2px 0 rgba(0,0,0,0.35); animation:fadeUp 0.5s ease forwards; position:relative; z-index:2; }
     .story-click-hint { position:absolute; bottom:26px; color:rgba(255,255,255,0.42); font-size:0.82rem; animation:blink 1.6s ease-in-out infinite; z-index:2; }
@@ -131,32 +131,7 @@
     /* ═══════════════════════════
        SCENE SCREENS
     ═══════════════════════════ */
-    .scene-screen { background:linear-gradient(180deg,#060c14 0%,#0a1220 20%,#0f1c30 45%,#1a2a44 75%,#243550 100%); overflow:hidden; }
-    /* Storm clouds overlay */
-    .storm-clouds { position:absolute; top:0; left:0; right:0; height:50%; pointer-events:none; z-index:1;
-      background:
-        radial-gradient(ellipse 45% 40% at 20% 25%, rgba(8,12,22,0.95) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 45% at 62% 15%, rgba(5,10,20,0.98) 0%, transparent 65%),
-        radial-gradient(ellipse 40% 35% at 88% 30%, rgba(10,15,28,0.9) 0%, transparent 65%);
-    }
-    /* City silhouette */
-    .city-bg { position:absolute; left:0; right:0; bottom:90px; height:42%; pointer-events:none; z-index:2;
-      background:#06080f;
-      clip-path:polygon(0% 100%, 0% 55%, 3% 55%, 3% 35%, 5% 35%, 5% 48%, 7% 48%, 7% 28%, 10% 28%, 10% 48%, 12% 48%, 12% 38%, 14% 38%, 14% 55%, 16% 55%, 16% 42%, 18% 42%, 18% 22%, 21% 22%, 21% 42%, 23% 42%, 23% 52%, 25% 52%, 25% 38%, 27% 38%, 27% 55%, 30% 55%, 30% 45%, 32% 45%, 32% 30%, 34% 30%, 34% 48%, 37% 48%, 37% 40%, 39% 40%, 39% 58%, 42% 58%, 42% 44%, 44% 44%, 44% 26%, 46% 26%, 46% 44%, 49% 44%, 49% 56%, 51% 56%, 51% 38%, 53% 38%, 53% 52%, 56% 52%, 56% 42%, 58% 42%, 58% 60%, 61% 60%, 61% 46%, 63% 46%, 63% 32%, 65% 32%, 65% 50%, 68% 50%, 68% 62%, 70% 62%, 70% 44%, 72% 44%, 72% 30%, 74% 30%, 74% 50%, 77% 50%, 77% 40%, 79% 40%, 79% 58%, 82% 58%, 82% 46%, 84% 46%, 84% 28%, 86% 28%, 86% 48%, 89% 48%, 89% 38%, 91% 38%, 91% 55%, 94% 55%, 94% 42%, 96% 42%, 96% 60%, 98% 60%, 98% 50%, 100% 50%, 100% 100%);
-    }
-    /* Window lights */
-    .city-bg::after { content:''; position:absolute; inset:0;
-      background:
-        radial-gradient(circle 2px at 8% 55%, rgba(255,220,100,0.6) 0%, transparent 100%),
-        radial-gradient(circle 2px at 19% 40%, rgba(255,220,100,0.5) 0%, transparent 100%),
-        radial-gradient(circle 2px at 33% 52%, rgba(255,220,100,0.4) 0%, transparent 100%),
-        radial-gradient(circle 2px at 45% 35%, rgba(255,220,100,0.6) 0%, transparent 100%),
-        radial-gradient(circle 2px at 54% 48%, rgba(200,200,255,0.4) 0%, transparent 100%),
-        radial-gradient(circle 2px at 66% 42%, rgba(255,220,100,0.5) 0%, transparent 100%),
-        radial-gradient(circle 2px at 73% 38%, rgba(255,220,100,0.6) 0%, transparent 100%),
-        radial-gradient(circle 2px at 85% 44%, rgba(200,200,255,0.5) 0%, transparent 100%),
-        radial-gradient(circle 2px at 92% 52%, rgba(255,220,100,0.4) 0%, transparent 100%);
-    }
+    .scene-screen { background:url('rainy-bg.png') center/cover no-repeat; overflow:hidden; }
     .scene-rain { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
     .scene-label { position:absolute; top:28px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.14); color:white; font-family:'Black Han Sans',sans-serif; font-size:1.05rem; padding:7px 22px; border-radius:20px; border:2px solid rgba(255,255,255,0.28); pointer-events:none; z-index:10; }
     .scene-back-hint { position:absolute; bottom:110px; color:rgba(255,255,255,0.38); font-size:0.82rem; animation:blink 1.6s ease-in-out infinite; z-index:10; pointer-events:none; }
@@ -402,40 +377,6 @@
   </div>
   <!-- Coins audio -->
   <audio id="coin-audio" src="coin.mp3" preload="auto"></audio>
-  <!-- Clouds -->
-  <div class="m-cloud cl1"></div>
-  <div class="m-cloud cl2"></div>
-  <div class="m-cloud cl3"></div>
-  <div class="m-cloud cl4"></div>
-  <!-- Hills -->
-  <div class="m-hill hill1"></div>
-  <div class="m-hill hill2"></div>
-  <div class="m-hill hill3"></div>
-  <!-- Pipe -->
-  <div class="m-pipe" style="left:12%;bottom:90px;">
-    <div class="m-pipe-head" style="bottom:clamp(70px,9.5vh,110px);"></div>
-    <div class="m-pipe-body" style="height:clamp(70px,9.5vh,110px);"></div>
-  </div>
-  <!-- Bushes -->
-  <div class="m-bush" style="right:18%;">
-    <div class="m-bush-c" style="width:38px;height:32px;margin-right:-10px;margin-bottom:4px;"></div>
-    <div class="m-bush-c" style="width:54px;height:48px;z-index:1;"></div>
-    <div class="m-bush-c" style="width:38px;height:32px;margin-left:-10px;margin-bottom:4px;"></div>
-  </div>
-  <div class="m-bush" style="left:24%;">
-    <div class="m-bush-c" style="width:30px;height:26px;margin-right:-8px;margin-bottom:2px;"></div>
-    <div class="m-bush-c" style="width:44px;height:38px;z-index:1;"></div>
-    <div class="m-bush-c" style="width:30px;height:26px;margin-left:-8px;margin-bottom:2px;"></div>
-  </div>
-  <!-- Decorative background blocks -->
-  <div class="db" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:20%;bottom:44vh;"></div>
-  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(30px,4.5vw,48px));bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
-  <div class="db" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(62px,9.5vw,98px));bottom:44vh;"></div>
-  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(94px,14.5vw,148px));bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
-  <!-- Lone floating Q block (like Mario 1-1) -->
-  <div class="dq" style="width:clamp(30px,4.2vw,48px);height:clamp(30px,4.2vw,48px);left:30%;bottom:56vh;font-size:clamp(0.85rem,1.6vw,1.15rem);">?</div>
-  <!-- Right side Q block -->
-  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);right:22%;bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
   <!-- Hit counter -->
   <div class="hit-ctr" id="hit-ctr">💗 0 / 3</div>
   <div id="brick-wrap">
@@ -443,11 +384,6 @@
   </div>
   <div id="mario-char">
     <img src="mario-jump.png" style="height:90px;width:auto;image-rendering:pixelated;display:block;" alt="마리오"/>
-  </div>
-  <!-- Ground -->
-  <div class="m-ground">
-    <div class="m-g-grass"></div>
-    <div class="m-g-dirt"></div>
   </div>
   <div class="click-hint">화면을 클릭하세요! (3번)</div>
 </div>
@@ -473,33 +409,21 @@
 
 <!-- ══ STORY 1 ══ -->
 <div id="s-story1" class="screen story-screen off">
-  <div class="storm-clouds"></div>
   <div class="story-rain" id="rain-s1"></div>
-  <img src="closed.png" class="rest-img" alt="영업종료"/>
-  <div class="city-bg"></div>
-  <div class="rain-ground"></div>
   <p class="story-text">연인과 여행을 떠난 날,<br>폭우가 내린다.</p>
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
 
 <!-- ══ STORY 2 ══ -->
 <div id="s-story2" class="screen story-screen off">
-  <div class="storm-clouds"></div>
   <div class="story-rain" id="rain-s2"></div>
-  <img src="closed.png" class="rest-img" alt="영업종료"/>
-  <div class="city-bg"></div>
-  <div class="rain-ground"></div>
   <p class="story-text">헉!<br>가기로 했던 맛집이<br>문을 닫았다...</p>
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
 
 <!-- ══ STORY 3 ══ -->
 <div id="s-story3" class="screen story-screen off">
-  <div class="storm-clouds"></div>
   <div class="story-rain" id="rain-s3"></div>
-  <img src="closed.png" class="rest-img" alt="영업종료"/>
-  <div class="city-bg"></div>
-  <div class="rain-ground"></div>
   <p class="story-text">큰일이다...</p>
   <div class="story-click-hint">클릭하여 계속</div>
 </div>
@@ -518,9 +442,6 @@
   <div class="thunder" id="thunder-a"></div>
   <div class="storm-clouds"></div>
   <div class="scene-rain" id="rain-sa"></div>
-  <img src="closed.png" class="rest-img" alt="영업종료"/>
-  <div class="city-bg"></div>
-  <div class="rain-ground"></div>
   <div class="scene-label">A 상황</div>
   <div class="scene-back-hint">화면을 클릭하면 돌아갑니다</div>
 </div>
@@ -530,9 +451,6 @@
   <div class="thunder" id="thunder-b"></div>
   <div class="storm-clouds"></div>
   <div class="scene-rain" id="rain-sb"></div>
-  <img src="closed.png" class="rest-img" alt="영업종료"/>
-  <div class="city-bg"></div>
-  <div class="rain-ground"></div>
   <div class="scene-label">B 상황</div>
   <div class="scene-back-hint">화면을 클릭하면 설문조사로 이동합니다</div>
 </div>
@@ -670,7 +588,7 @@
       <span class="ios-lbl">전화</span>
     </div>
     <div class="ios-icon" id="kakao-app-icon" onclick="openKakao()">
-      <div class="ios-box" style="background:#FEE500">
+      <div class="ios-box" style="background:#FEE500; overflow:visible;">
         💬
         <div class="ios-badge">1</div>
       </div>
@@ -731,8 +649,9 @@
   /* ── AUDIO ── */
   function makeAudio(src) { const a = new Audio(src); a.preload='auto'; return a; }
   const sfxCoin  = makeAudio('coin.mp3');
-  const sfxBreak = makeAudio('break.mp3');
+  const sfxBreak = makeAudio('book.mp3');
   const sfxRain  = makeAudio('rain.mp3');
+  const sfxVote  = makeAudio('vote.mp3');
 
   function playCoin() {
     try { sfxCoin.currentTime=0; sfxCoin.play(); setTimeout(()=>{ sfxCoin.pause(); sfxCoin.currentTime=0; },1000); } catch(e){}
@@ -741,7 +660,18 @@
     try { sfxBreak.currentTime=0; sfxBreak.play(); setTimeout(()=>{ sfxBreak.pause(); sfxBreak.currentTime=0; },1000); } catch(e){}
   }
   function playRain() {
-    try { sfxRain.currentTime=0; sfxRain.play(); setTimeout(()=>{ sfxRain.pause(); sfxRain.currentTime=0; },2000); } catch(e){}
+    try {
+      sfxRain.currentTime=0; sfxRain.volume=1; sfxRain.play();
+      // Fade out over last 1s (start at 2s, end at 3s)
+      setTimeout(()=>{
+        let vol=1;
+        const fi=setInterval(()=>{
+          vol=Math.max(0,vol-0.05);
+          try { sfxRain.volume=vol; } catch(e){}
+          if(vol<=0){ clearInterval(fi); try{ sfxRain.pause(); sfxRain.currentTime=0; sfxRain.volume=1; }catch(e){} }
+        },50);
+      },2000);
+    } catch(e){}
   }
 
   /* ── STATE ── */
@@ -774,7 +704,7 @@
     if ((id==='s-scene-a'||id==='s-scene-b') && !rainDone[id+'-p']) { makePuddles(id); rainDone[id+'-p']=true; }
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
-    if (id==='s-results') setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600);
+    if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ try{ sfxVote.currentTime=0; sfxVote.play(); }catch(e){} },2000); }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
