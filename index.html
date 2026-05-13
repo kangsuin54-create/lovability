@@ -2,12 +2,32 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>러빌리티 — Lovability</title>
   <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    body { width:100vw; height:100vh; overflow:hidden; font-family:'Nanum Gothic',sans-serif; cursor:pointer; user-select:none; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body {
+      width:100vw; height:100vh; overflow:hidden;
+      font-family:'Nanum Gothic',sans-serif; cursor:pointer; user-select:none;
+      -webkit-text-size-adjust:100%; text-size-adjust:100%;
+      overscroll-behavior:none; touch-action:manipulation;
+      /* Safe area for notched phones */
+      padding-top: env(safe-area-inset-top,0px);
+      padding-bottom: env(safe-area-inset-bottom,0px);
+    }
+    /* Mobile performance */
+    .screen { will-change:contents; }
+    #mario-char, .mario-jump { will-change:transform; }
+    .lv-able, .lv-ability { will-change:transform,opacity; }
+    /* Larger tap targets on mobile */
+    .next-btn, .c-btn, .s-opt, .survey-result-btn, .lovability-btn,
+    .kt-btn-send, .ios-icon, .choice-btn { min-height:44px; }
+    /* Prevent text selection on tap */
+    .screen, .ios-icon, .c-btn, .s-opt { -webkit-user-select:none; user-select:none; }
     .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
     .screen.off { display:none; }
     @keyframes blink     { 0%,100%{opacity:1} 50%{opacity:0.35} }
@@ -646,6 +666,27 @@
 </div>
 
 <script>
+  /* ── MOBILE: iOS 오디오 잠금 해제 ── */
+  let audioUnlocked = false;
+  function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    [sfxCoin, sfxBreak, sfxRain, sfxVote, sfxFanfare].forEach(a => {
+      if (!a) return;
+      a.play().then(() => { a.pause(); a.currentTime = 0; }).catch(() => {});
+    });
+  }
+  document.addEventListener('touchstart', unlockAudio, { once: true, passive: true });
+  document.addEventListener('click', unlockAudio, { once: true });
+
+  /* ── MOBILE: 더블탭 줌 방지 ── */
+  let lastTap = 0;
+  document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - lastTap < 300) e.preventDefault();
+    lastTap = now;
+  }, { passive: false });
+
   /* ── AUDIO ── */
   function makeAudio(src) { const a = new Audio(src); a.preload='auto'; return a; }
   const sfxCoin  = makeAudio('coin.mp3');
@@ -706,7 +747,7 @@
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
     if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ try{ sfxVote.currentTime=0; sfxVote.play(); }catch(e){} },2000); }
-    if (id==='s-gallery') { try{ sfxFanfare.currentTime=0; sfxFanfare.play(); }catch(e){} }
+    if (id==='s-gallery') { try{ sfxFanfare.currentTime=0; sfxFanfare.play(); setTimeout(()=>{ sfxFanfare.pause(); sfxFanfare.currentTime=0; },1300); }catch(e){} }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
@@ -821,8 +862,8 @@
     const days=['일','월','화','수','목','금','토'];
     document.getElementById('kt-date-chip').textContent =
       `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일 ${days[now.getDay()]}요일`;
-    // Focus input
-    setTimeout(()=>inp.focus(), 400);
+    // Focus input (desktop only - mobile keyboard 방지)
+    if (window.innerWidth > 768) setTimeout(()=>inp.focus(), 400);
   }
 
   function getTime() {
