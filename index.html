@@ -721,7 +721,24 @@
   function vote(which) {
     document.querySelector('.s-opt-a').classList.toggle('selected', which==='a');
     document.querySelector('.s-opt-b').classList.toggle('selected', which==='b');
-    document.getElementById('survey-go').classList.add('show');
+    // Disable buttons after voting
+    document.querySelector('.s-opt-a').disabled = true;
+    document.querySelector('.s-opt-b').disabled = true;
+    // Show countdown then reveal button
+    const btn = document.getElementById('survey-go');
+    const sub = document.querySelector('.survey-sub');
+    let sec = 10;
+    sub.textContent = `잠시 후 결과를 공개합니다... (${sec}초)`;
+    const timer = setInterval(()=>{
+      sec--;
+      if (sec > 0) {
+        sub.textContent = `잠시 후 결과를 공개합니다... (${sec}초)`;
+      } else {
+        clearInterval(timer);
+        sub.textContent = '결과가 준비됐습니다!';
+        btn.classList.add('show');
+      }
+    }, 1000);
   }
 
   /* ── PHONE HOME ── */
