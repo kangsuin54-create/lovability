@@ -25,19 +25,19 @@
     /* ═══════════════════════════
        MARIO
     ═══════════════════════════ */
-    #s-mario { background:url('mario-bg3.png') center/cover no-repeat; overflow:hidden; }
+    #s-mario { background:url('mario-bg3.png') bottom center / 100% 100% no-repeat; overflow:hidden; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
     .screen-shake { animation:shake 0.4s ease; }
     .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
     .mario-title .tl { color:#FFD54F; }
     .hit-ctr { position:absolute; top:28px; right:28px; background:rgba(0,0,0,0.55); color:white; font-weight:800; font-size:1.15rem; padding:7px 16px; border-radius:20px; pointer-events:none; }
-    #brick-wrap { position:absolute; bottom:50vh; left:49%; pointer-events:none; }
+    #brick-wrap { position:absolute; bottom:46vh; left:72%; pointer-events:none; }
     #brick-svg { display:block; image-rendering:pixelated; }
     .heart-pop { position:absolute; font-size:2rem; pointer-events:none; animation:heartFly 0.9s ease-out forwards; left:50%; transform:translateX(-50%); top:-10px; z-index:20; }
     @keyframes heartFly { 0%{transform:translateX(-50%) translateY(0) scale(0.4);opacity:1} 30%{opacity:1} 100%{transform:translateX(-50%) translateY(-110px) scale(1.6);opacity:0} }
-    #mario-char { position:absolute; bottom:13vh; left:43%; pointer-events:none; }
+    #mario-char { position:absolute; bottom:17vh; left:66%; pointer-events:none; }
     .mario-jump { animation:marioJump 0.5s cubic-bezier(0.4,0,0.6,1); }
-    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(-37vh)} }
+    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(-29vh)} }
     .mario-ground { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(180deg,#52A024 0%,#6BC42A 22%,#8B6914 22%,#A07830 100%); pointer-events:none; }
     .mario-ground::before { content:''; position:absolute; top:0; left:0; right:0; height:22px; background:repeating-linear-gradient(90deg,transparent 0px,transparent 32px,rgba(0,0,0,0.12) 32px,rgba(0,0,0,0.12) 34px); }
     .click-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; font-weight:700; font-size:0.88rem; padding:7px 20px; border-radius:20px; pointer-events:none; animation:blink 1.6s ease-in-out infinite; }
