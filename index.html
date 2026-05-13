@@ -410,54 +410,6 @@
   <div class="click-hint">화면을 클릭하세요! (3번)</div>
 </div>
 
-<!-- ══ TABLE / PAPER REFERENCE ══ -->
-<div id="s-table" class="screen off">
-  <div class="tbl-card">
-    <div>
-      <div class="tbl-eyebrow">📄 논문 기반 개념도</div>
-      <div class="tbl-title" style="margin-top:6px;">'속성 중심의 사랑'이 가진 한계</div>
-    </div>
-    <div class="tbl-sub">
-      우리가 흔히 사랑의 <strong>'자격'</strong>이라 믿는 것들—외모, 성격, 능력—은<br>
-      속성(조건)에 불과합니다. 이 구조가 만드는 문제를 시각화하면 다음과 같습니다.
-    </div>
-
-    <table class="concept-tbl">
-      <thead>
-        <tr>
-          <th>구분</th>
-          <th>내용 (논문 기반)</th>
-          <th>예시</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="row-attr">
-          <td>중심적 속성</td>
-          <td>우리가 흔히 '자격'이라 믿는 외적인 조건</td>
-          <td>외모, 성격, 지적 능력, 유머 등</td>
-        </tr>
-        <tr class="row-obj">
-          <td>형식적 대상</td>
-          <td>해당 속성이 도달하는 결론</td>
-          <td>"사랑받을 만함<br>(Lovable)"</td>
-        </tr>
-        <tr class="row-crit">
-          <td>논문의 비판</td>
-          <td>속성이 변하면 사랑도 변하는<br>'사랑의 퍼즐' 발생</td>
-          <td>"더 예쁜 사람이<br>나타나면?"</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div class="tbl-footer">
-      <a class="tbl-paper-link" href="https://lrl.kr/c0dLS" target="_blank" rel="noopener">
-        📎 논문 원문 바로가기
-      </a>
-      <span class="tbl-click-hint">클릭하여 계속 →</span>
-    </div>
-  </div>
-</div>
-
 <!-- ══ LOVABLE → LOVABILITY ══ -->
 <div id="s-intro-word" class="screen off">
   <div class="lv-display">
@@ -469,6 +421,12 @@
   </div>
   <div class="lv-click-hint" id="lv-hint">클릭하면 변신!</div>
   <div class="lv-meaning" id="lv-meaning">love + ability = 사랑하는 능력 💗</div>
+  <a href="https://lrl.kr/c0dLS" target="_blank" rel="noopener"
+     style="font-size:clamp(0.7rem,1.5vw,0.82rem);color:#9B72CF;font-weight:800;text-decoration:none;border:2px solid #9B72CF;border-radius:20px;padding:6px 16px;transition:background 0.15s,color 0.15s;margin-top:4px;"
+     onmouseover="this.style.background='#9B72CF';this.style.color='white'"
+     onmouseout="this.style.background='';this.style.color='#9B72CF'">
+    📎 근거 자료 보기
+  </a>
 </div>
 
 <!-- ══ STORY 1 ══ -->
@@ -745,7 +703,7 @@
     const bs=document.getElementById('brick-svg'); bs.classList.add('brick-bump');
     setTimeout(spawnHeart,210);
     document.getElementById('hit-ctr').textContent=`💗 ${marioHits} / 3`;
-    setTimeout(()=>{ mc.classList.remove('mario-jump'); bs.classList.remove('brick-bump'); marioLocked=false; if(marioHits>=3) go('s-table',700); },460);
+    setTimeout(()=>{ mc.classList.remove('mario-jump'); bs.classList.remove('brick-bump'); marioLocked=false; if(marioHits>=3) go('s-intro-word',700); },460);
   }
   function spawnHeart() {
     const w=document.getElementById('brick-wrap');
@@ -897,9 +855,6 @@
     if(e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn,.kt-header,.kt-input-bar,.app-icon,.app-dock')) return;
     switch(current) {
       case 's-mario':   marioHit(); break;
-      case 's-table':
-        if (!e.target.closest('a')) go('s-intro-word');
-        break;
       case 's-intro-word':
         if (lvPhase === 0) {
           lvPhase = 1;
