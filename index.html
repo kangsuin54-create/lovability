@@ -651,7 +651,8 @@
   const sfxCoin  = makeAudio('coin.mp3');
   const sfxBreak = makeAudio('book.mp3');
   const sfxRain  = makeAudio('rain.mp3');
-  const sfxVote  = makeAudio('vote.mp3');
+  const sfxVote    = makeAudio('vote.mp3');
+  const sfxFanfare = makeAudio('fanfare.mp3');
 
   function playCoin() {
     try { sfxCoin.currentTime=0; sfxCoin.play(); setTimeout(()=>{ sfxCoin.pause(); sfxCoin.currentTime=0; },1000); } catch(e){}
@@ -705,6 +706,7 @@
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
     if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ try{ sfxVote.currentTime=0; sfxVote.play(); }catch(e){} },2000); }
+    if (id==='s-gallery') { try{ sfxFanfare.currentTime=0; sfxFanfare.play(); }catch(e){} }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
