@@ -25,7 +25,9 @@
     /* ═══════════════════════════
        MARIO
     ═══════════════════════════ */
-    #s-mario { background:url('mario-bg.png') center/cover no-repeat; overflow:hidden; }
+    #s-mario { background:url('mario-bg.webp') center/cover no-repeat; overflow:hidden; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-6px)} 40%{transform:translateX(6px)} 60%{transform:translateX(-4px)} 80%{transform:translateX(4px)} }
+    .brick-shake { animation:shake 0.35s ease; }
     .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
     .mario-title .tl { color:#FFD54F; }
     .hit-ctr { position:absolute; top:28px; right:28px; background:rgba(0,0,0,0.55); color:white; font-weight:800; font-size:1.15rem; padding:7px 16px; border-radius:20px; pointer-events:none; }
@@ -622,6 +624,11 @@
     marioLocked=true; marioHits++;
     const mc=document.getElementById('mario-char'); mc.classList.add('mario-jump');
     const bs=document.getElementById('brick-svg'); bs.classList.add('brick-bump');
+    // 벽돌 진동 효과
+    const bw=document.getElementById('brick-wrap');
+    setTimeout(()=>{ bw.classList.add('brick-shake'); setTimeout(()=>bw.classList.remove('brick-shake'),380); }, 180);
+    // 화면 전체 진동
+    setTimeout(()=>{ document.body.style.animation='shake 0.3s ease'; setTimeout(()=>document.body.style.animation='',320); }, 200);
     setTimeout(spawnHeart,210);
     document.getElementById('hit-ctr').textContent=`💗 ${marioHits} / 3`;
     setTimeout(()=>{ mc.classList.remove('mario-jump'); bs.classList.remove('brick-bump'); marioLocked=false; if(marioHits>=3) go('s-intro-word',700); },460);
