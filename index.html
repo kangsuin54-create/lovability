@@ -696,7 +696,13 @@
   const sfxFanfare = makeAudio('fanfare.mp3');
 
   function playCoin() {
-    try { sfxCoin.currentTime=0; sfxCoin.play(); setTimeout(()=>{ sfxCoin.pause(); sfxCoin.currentTime=0; },1000); } catch(e){}
+    try {
+      const a = new Audio('coin.mp3');
+      a.volume = 1;
+      const p = a.play();
+      if (p) p.catch(()=>{});
+      setTimeout(()=>{ try{ a.pause(); a.src=''; }catch(e){} }, 1000);
+    } catch(e) {}
   }
   function playBreak() {
     try { sfxBreak.currentTime=0; sfxBreak.play(); setTimeout(()=>{ sfxBreak.pause(); sfxBreak.currentTime=0; },1000); } catch(e){}
