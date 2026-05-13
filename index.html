@@ -25,7 +25,7 @@
     /* ═══════════════════════════
        MARIO
     ═══════════════════════════ */
-    #s-mario { background:url('mario-bg3.png') bottom center / 100% 100% no-repeat; overflow:hidden; }
+    #s-mario { background:url('mario-bg3.png') bottom center / cover no-repeat; overflow:hidden; }
     @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
     .screen-shake { animation:shake 0.4s ease; }
     .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
@@ -243,23 +243,31 @@
     }
     .lv-meaning.show { opacity:1; }
 
-    /* ── HOME SCREEN ── */
-    .home-wrap { position:absolute; inset:0; display:flex; flex-direction:column; }
-    .app-area { flex:1; display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(14px,3vw,26px); padding:clamp(60px,10vh,90px) clamp(16px,4vw,36px) 16px; align-content:start; }
-    .app-icon { display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
-    .app-icon:active .app-box { transform:scale(0.88); }
-    .app-box { width:clamp(52px,13vw,72px); height:clamp(52px,13vw,72px); border-radius:clamp(12px,3vw,18px); display:flex; align-items:center; justify-content:center; font-size:clamp(1.6rem,4.5vw,2.2rem); position:relative; transition:transform 0.1s; box-shadow:0 4px 12px rgba(0,0,0,0.2); }
-    .app-lbl { font-size:clamp(0.6rem,1.5vw,0.72rem); color:white; text-shadow:0 1px 4px rgba(0,0,0,0.6); font-weight:700; text-align:center; }
-    .app-badge { position:absolute; top:-5px; right:-5px; background:#FF3B30; color:white; min-width:18px; height:18px; border-radius:9px; font-size:0.58rem; font-weight:800; display:flex; align-items:center; justify-content:center; border:2px solid rgba(255,255,255,0.9); padding:0 3px; }
-    .kakao-box { background:#FEE500; }
-    .phone-box  { background:linear-gradient(135deg,#34C759,#30B455); }
-    .cam-box    { background:linear-gradient(135deg,#1C1C1E,#3A3A3C); }
-    .msg-box    { background:linear-gradient(135deg,#34C759,#2EB649); }
-    .map-box    { background:linear-gradient(135deg,#FF9500,#FF6B00); }
-    .photo-box  { background:linear-gradient(135deg,#FF2D55,#FF6B00,#FFD60A,#30D158,#32ADE6,#BF5AF2); }
-    .music-box  { background:linear-gradient(135deg,#FF2D55,#BF5AF2); }
-    .set-box    { background:linear-gradient(135deg,#636366,#48484A); }
-    .app-dock { height:clamp(80px,13vh,110px); margin:0 clamp(14px,3vw,24px) clamp(12px,2vh,20px); background:rgba(255,255,255,0.22); border-radius:24px; backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:space-around; padding:0 16px; }
+    /* ── IOS HOME SCREEN ── */
+    .ios-wp { position:absolute; inset:0; background:linear-gradient(160deg,#FF9A3C 0%,#FF6835 20%,#FF4060 50%,#C2187F 78%,#8F1A6E 100%); }
+    .ios-status { position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:100; }
+    .ios-time { font-size:0.95rem; font-weight:700; color:white; }
+    .ios-status-r { display:flex; align-items:center; gap:5px; }
+    .ios-batt { width:22px; height:11px; border:1.5px solid rgba(255,255,255,0.85); border-radius:2.5px; position:relative; overflow:hidden; }
+    .ios-batt::after { content:''; position:absolute; right:-4px; top:50%; transform:translateY(-50%); width:2.5px; height:6px; background:rgba(255,255,255,0.85); border-radius:0 1.5px 1.5px 0; }
+    .ios-batt-fill { height:100%; width:78%; background:white; }
+    .ios-grid { position:absolute; top:44px; left:0; right:0; bottom:88px; display:grid; grid-template-columns:repeat(4,1fr); align-content:start; padding:20px 14px 0; gap:clamp(13px,2.6vh,22px) 5px; }
+    .ios-icon { display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+    .ios-icon:active .ios-box { transform:scale(0.88); }
+    .ios-box { width:clamp(52px,13vw,68px); height:clamp(52px,13vw,68px); border-radius:clamp(11px,2.8vw,15px); display:flex; flex-direction:column; align-items:center; justify-content:center; font-size:clamp(1.55rem,3.8vw,2rem); box-shadow:0 2px 8px rgba(0,0,0,0.25); transition:transform 0.1s; flex-shrink:0; position:relative; overflow:hidden; }
+    .ios-lbl { font-size:clamp(0.58rem,1.4vw,0.7rem); color:white; text-shadow:0 1px 3px rgba(0,0,0,0.6); text-align:center; font-weight:500; width:clamp(52px,13vw,68px); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    /* Calendar icon */
+    .ios-cal { background:white; padding:0; gap:0; }
+    .ios-cal-top { width:100%; background:#FF3B30; color:white; font-size:clamp(0.36rem,0.9vw,0.45rem); font-weight:700; text-align:center; padding:2px 0; letter-spacing:0.5px; }
+    .ios-cal-day { font-size:clamp(1.15rem,3.2vw,1.65rem); font-weight:200; color:#1C1C1E; margin-top:1px; line-height:1; }
+    /* Badge */
+    .ios-badge { position:absolute; top:-5px; right:-5px; background:#FF3B30; color:white; min-width:17px; height:17px; border-radius:9px; font-size:0.52rem; font-weight:800; display:flex; align-items:center; justify-content:center; padding:0 3px; border:2px solid white; z-index:5; }
+    /* Page dots */
+    .ios-dots { position:absolute; left:0; right:0; bottom:92px; display:flex; justify-content:center; gap:6px; }
+    .ios-dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.38); }
+    .ios-dot.on { background:white; }
+    /* Dock */
+    .ios-dock { position:absolute; bottom:0; left:8px; right:8px; height:82px; background:rgba(255,255,255,0.2); backdrop-filter:blur(22px); -webkit-backdrop-filter:blur(22px); border-radius:20px 20px 0 0; border:1px solid rgba(255,255,255,0.28); border-bottom:none; display:flex; align-items:center; justify-content:space-around; padding:0 14px; }
 
     /* ── GALLERY ── */
     #s-gallery { background:#fff; cursor:default; padding:0; }
@@ -458,42 +466,121 @@
 
 <!-- ══ PHONE HOME SCREEN ══ -->
 <div id="s-phone" class="screen off">
-  <div class="phone-wp">
-    <div class="wp-sun"></div>
-    <div class="wp-cloud wpc1"></div>
-    <div class="wp-cloud wpc2"></div>
-    <div class="wp-grass"></div>
-  </div>
-  <div class="phone-status">
-    <span class="ph-time" id="ph-time">9:41</span>
-    <div class="ph-icons"><span>▲▲▲</span><span>WiFi</span><span>🔋</span></div>
-  </div>
-  <div class="home-wrap">
-    <div class="app-area">
-      <div class="app-icon"><div class="app-box cam-box">📷</div><span class="app-lbl">카메라</span></div>
-      <div class="app-icon"><div class="app-box photo-box">🖼️</div><span class="app-lbl">사진</span></div>
-      <div class="app-icon"><div class="app-box music-box">🎵</div><span class="app-lbl">음악</span></div>
-      <div class="app-icon"><div class="app-box set-box">⚙️</div><span class="app-lbl">설정</span></div>
-      <div class="app-icon"><div class="app-box map-box">🗺️</div><span class="app-lbl">지도</span></div>
-      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#0088cc,#0055aa)">📘</div><span class="app-lbl">네이버</span></div>
-      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#E1306C,#833AB4,#F56040)">📷</div><span class="app-lbl">인스타</span></div>
-      <div class="app-icon"><div class="app-box" style="background:linear-gradient(135deg,#FF0000,#CC0000)">▶️</div><span class="app-lbl">유튜브</span></div>
+  <!-- iOS Wallpaper -->
+  <div class="ios-wp"></div>
+
+  <!-- Status bar -->
+  <div class="ios-status">
+    <span class="ios-time" id="ios-time">9:41</span>
+    <div class="ios-status-r">
+      <svg width="17" height="12" viewBox="0 0 17 12"><rect x="0" y="8" width="3" height="4" rx="0.5" fill="white" opacity="0.35"/><rect x="4.5" y="5.5" width="3" height="6.5" rx="0.5" fill="white" opacity="0.55"/><rect x="9" y="2.5" width="3" height="9.5" rx="0.5" fill="white" opacity="0.78"/><rect x="13.5" y="0" width="3" height="12" rx="0.5" fill="white"/></svg>
+      <svg width="16" height="12" viewBox="0 0 16 12"><circle cx="8" cy="10.5" r="1.4" fill="white"/><path d="M4.8 7.8 Q8 4.8 11.2 7.8" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M2 5.2 Q8 -0.5 14 5.2" stroke="white" stroke-width="1.4" fill="none" stroke-linecap="round"/></svg>
+      <div class="ios-batt"><div class="ios-batt-fill"></div></div>
     </div>
-    <!-- Dock -->
-    <div class="app-dock">
-      <div class="app-icon"><div class="app-box phone-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">📞</div><span class="app-lbl">전화</span></div>
-      <div class="app-icon" id="kakao-app-icon" style="cursor:pointer" onclick="openKakao()">
-        <div class="app-box kakao-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">
-          💬
-          <div class="app-badge">1</div>
-        </div>
-        <span class="app-lbl">카카오톡</span>
+  </div>
+
+  <!-- App Grid 4×4 -->
+  <div class="ios-grid">
+    <!-- Row 1 -->
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#3DCC58,#25A03E)">📹</div>
+      <span class="ios-lbl">영상통화</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box ios-cal">
+        <div class="ios-cal-top" id="ios-cal-month">5월</div>
+        <div class="ios-cal-day" id="ios-cal-day">13</div>
       </div>
-      <div class="app-icon"><div class="app-box msg-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">✉️</div><span class="app-lbl">문자</span></div>
-      <div class="app-icon" onclick="go('s-gallery')">
-        <div class="app-box photo-box" style="width:clamp(52px,13vw,68px);height:clamp(52px,13vw,68px)">🖼️</div>
-        <span class="app-lbl">갤러리</span>
+      <span class="ios-lbl">달력</span>
+    </div>
+    <div class="ios-icon" onclick="go('s-gallery')">
+      <div class="ios-box" style="background:linear-gradient(135deg,#FF2D55 0%,#FF6B00 25%,#FFD60A 50%,#30D158 72%,#32ADE6 87%,#BF5AF2 100%)">🌸</div>
+      <span class="ios-lbl">사진</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#2C2C2E,#444)">📷</div>
+      <span class="ios-lbl">카메라</span>
+    </div>
+    <!-- Row 2 -->
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#1A82F7,#006FE8)">✉️</div>
+      <span class="ios-lbl">메일</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:#1C1C1E">⏰</div>
+      <span class="ios-lbl">시계</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#68B8FF,#A8E05A)">🗺️</div>
+      <span class="ios-lbl">지도</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#44B5F5,#79D0FA)">🌤️</div>
+      <span class="ios-lbl">날씨</span>
+    </div>
+    <!-- Row 3 -->
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#FFD60A,#FFBA08)">📝</div>
+      <span class="ios-lbl">메모</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:white">☑️</div>
+      <span class="ios-lbl">미리 알림</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:#1C1C1E">📊</div>
+      <span class="ios-lbl">주식</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#FF9500,#D47800)">📚</div>
+      <span class="ios-lbl">도서</span>
+    </div>
+    <!-- Row 4 -->
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#1C8CF3,#0060D0);color:white;font-size:1.1rem;font-weight:800;font-family:system-ui,sans-serif;">A</div>
+      <span class="ios-lbl">앱 스토어</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#C068D0,#8B2FC9)">🎙️</div>
+      <span class="ios-lbl">팟캐스트</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:#1C1C1E">📺</div>
+      <span class="ios-lbl">TV</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:white">❤️</div>
+      <span class="ios-lbl">건강</span>
+    </div>
+  </div>
+
+  <!-- Page dots -->
+  <div class="ios-dots">
+    <div class="ios-dot on"></div>
+    <div class="ios-dot"></div>
+    <div class="ios-dot"></div>
+  </div>
+
+  <!-- Dock -->
+  <div class="ios-dock">
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#3DCC58,#25A03E)">📞</div>
+      <span class="ios-lbl">전화</span>
+    </div>
+    <div class="ios-icon" id="kakao-app-icon" onclick="openKakao()">
+      <div class="ios-box" style="background:#FEE500">
+        💬
+        <div class="ios-badge">1</div>
       </div>
+      <span class="ios-lbl">카카오톡</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(160deg,#3DCC58,#25A03E)">💬</div>
+      <span class="ios-lbl">메시지</span>
+    </div>
+    <div class="ios-icon">
+      <div class="ios-box" style="background:linear-gradient(135deg,#FC3C44,#FF2D55)">🎵</div>
+      <span class="ios-lbl">음악</span>
     </div>
   </div>
 </div>
@@ -657,7 +744,10 @@
     const now=new Date();
     const h=now.getHours().toString().padStart(2,'0');
     const m=now.getMinutes().toString().padStart(2,'0');
-    document.getElementById('ph-time').textContent=`${h}:${m}`;
+    document.getElementById('ios-time').textContent=`${h}:${m}`;
+    const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+    document.getElementById('ios-cal-month').textContent=months[now.getMonth()];
+    document.getElementById('ios-cal-day').textContent=now.getDate();
   }
   function openKakao() { go('s-kakao'); }
 
@@ -784,7 +874,7 @@
 
   /* ── GLOBAL CLICK ── */
   document.addEventListener('click', e=>{
-    if(e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn,.kt-header,.kt-input-bar,.app-icon,.app-dock')) return;
+    if(e.target.closest('.c-btn,.s-opt,.survey-result-btn,.lovability-btn,.kt-header,.kt-input-bar,.app-icon,.app-dock,.ios-icon,.ios-dock')) return;
     switch(current) {
       case 's-mario':   marioHit(); break;
       case 's-intro-word':
