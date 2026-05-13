@@ -744,7 +744,7 @@
       setTimeout(()=>{
         const hint = document.createElement('div');
         hint.style.cssText = 'align-self:center;background:rgba(0,0,0,0.15);color:#444;font-size:0.72rem;padding:5px 14px;border-radius:12px;margin-top:8px;';
-        hint.textContent = '화면을 클릭하면 홈으로 돌아갑니다';
+        hint.textContent = '화면을 클릭하면 갤러리가 열립니다 🖼️';
         chat.insertBefore(hint, typing);
         scrollChat();
       }, 500);
@@ -838,7 +838,7 @@
       case 's-story3':  go('s-choice'); break;
       case 's-scene-a': go('s-choice'); break;
       case 's-scene-b': go('s-survey'); break;
-      case 's-kakao':   if (ktScriptDone) go('s-phone'); break;
+      case 's-kakao':   if (ktScriptDone) go('s-gallery'); break;
     }
   });
 </script>
