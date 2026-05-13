@@ -656,6 +656,10 @@
   function onEnter(id) {
     const rainMap = { 's-story1':'rain-s1','s-story2':'rain-s2','s-story3':'rain-s3','s-scene-a':'rain-sa','s-scene-b':'rain-sb' };
     if (rainMap[id] && !rainDone[id]) { makeRain(rainMap[id], id.startsWith('s-scene')); rainDone[id]=true; }
+    // Auto-advance story screens
+    if (id==='s-story1') setTimeout(()=>{ if(current==='s-story1') go('s-story2'); }, 2800);
+    if (id==='s-story2') setTimeout(()=>{ if(current==='s-story2') go('s-story3'); }, 2800);
+    if (id==='s-story3') setTimeout(()=>{ if(current==='s-story3') go('s-choice'); }, 2800);
     if ((id==='s-scene-a'||id==='s-scene-b') && !rainDone[id+'-p']) { makePuddles(id); rainDone[id+'-p']=true; }
     if (id==='s-scene-a') scheduleThunder('thunder-a');
     if (id==='s-scene-b') scheduleThunder('thunder-b');
@@ -870,9 +874,6 @@
           go('s-story1');
         }
         break;
-      case 's-story1':  go('s-story2'); break;
-      case 's-story2':  go('s-story3'); break;
-      case 's-story3':  go('s-choice'); break;
       case 's-scene-a': go('s-choice'); break;
       case 's-scene-b': go('s-survey'); break;
       case 's-kakao':   if (ktScriptDone) go('s-gallery'); break;
