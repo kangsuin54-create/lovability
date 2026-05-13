@@ -753,7 +753,6 @@
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
     if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ try{ sfxVote.currentTime=0; sfxVote.play(); }catch(e){} },2000); }
-    if (id==='s-gallery') { try{ sfxFanfare.currentTime=0; sfxFanfare.play(); setTimeout(()=>{ sfxFanfare.pause(); sfxFanfare.currentTime=0; },1300); }catch(e){} }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
