@@ -25,19 +25,68 @@
     /* ═══════════════════════════
        MARIO
     ═══════════════════════════ */
-    #s-mario { background:url('mario-bg3.png') bottom center / cover no-repeat; overflow:hidden; }
-    @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-7px)} 30%{transform:translateX(7px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
-    .screen-shake { animation:shake 0.4s ease; }
+    /* ── MARIO CSS SCENE ── */
+    #s-mario { background:linear-gradient(180deg,#5C94FC 0%,#5C94FC 72%,#6BA4FC 100%); overflow:hidden; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-5px)} 60%{transform:translateX(5px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
+    .screen-shake { animation:shake 0.42s ease; }
+    /* Clouds */
+    .m-cloud { position:absolute; background:white; border-radius:60px; pointer-events:none; }
+    .m-cloud::before,.m-cloud::after { content:''; position:absolute; background:white; border-radius:50%; }
+    .cl1 { width:120px; height:42px; top:11%; left:7%;  animation:cdrift 9s  ease-in-out infinite; }
+    .cl1::before { width:56px; height:56px; top:-26px; left:14px; }
+    .cl1::after  { width:44px; height:44px; top:-20px; left:56px; }
+    .cl2 { width:150px; height:50px; top:7%;  left:40%; animation:cdrift 12s ease-in-out infinite reverse; }
+    .cl2::before { width:70px; height:70px; top:-32px; left:18px; }
+    .cl2::after  { width:54px; height:54px; top:-26px; left:76px; }
+    .cl3 { width:100px; height:34px; top:19%; right:10%; animation:cdrift 10s ease-in-out infinite; }
+    .cl3::before { width:46px; height:46px; top:-22px; left:10px; }
+    .cl3::after  { width:36px; height:36px; top:-16px; left:46px; }
+    .cl4 { width:130px; height:44px; top:5%;  right:26%; animation:cdrift 8s  ease-in-out infinite reverse; }
+    .cl4::before { width:60px; height:60px; top:-28px; left:16px; }
+    .cl4::after  { width:46px; height:46px; top:-22px; left:62px; }
+    /* Hills */
+    .m-hill { position:absolute; border-radius:50% 50% 0 0; pointer-events:none; background:#5EA800; }
+    .m-hill::after { content:''; position:absolute; border-radius:50% 50% 0 0; background:#6DC400; bottom:0; }
+    .hill1 { width:clamp(200px,28vw,340px); height:clamp(80px,11vh,140px); left:-20px; bottom:90px; }
+    .hill1::after { width:72%; height:72%; left:14%; }
+    .hill2 { width:clamp(180px,24vw,300px); height:clamp(70px,10vh,120px); left:38%; bottom:90px; }
+    .hill2::after { width:70%; height:70%; left:15%; }
+    .hill3 { width:clamp(200px,26vw,320px); height:clamp(75px,11vh,130px); right:-10px; bottom:90px; }
+    .hill3::after { width:68%; height:68%; left:16%; }
+    /* Pipe */
+    .m-pipe { position:absolute; pointer-events:none; }
+    .m-pipe-body { width:clamp(42px,5.5vw,66px); background:linear-gradient(90deg,#1E781E 0%,#38B238 30%,#52C852 55%,#38B238 80%,#1E781E 100%); border:2px solid #0E580E; position:absolute; bottom:0; }
+    .m-pipe-head { height:clamp(14px,2vh,20px); background:linear-gradient(90deg,#1E781E 0%,#38B238 30%,#52C852 55%,#38B238 80%,#1E781E 100%); border:2px solid #0E580E; position:absolute; left:-7px; right:-7px; }
+    /* Bush */
+    .m-bush { position:absolute; bottom:90px; pointer-events:none; display:flex; align-items:flex-end; }
+    .m-bush-c { border-radius:50%; background:#52A800; flex-shrink:0; }
+    /* Decorative Q-blocks */
+    .dq { position:absolute; background:#E4A030; border:3px solid #6A3800; border-radius:3px; display:flex; align-items:center; justify-content:center; font-family:'Black Han Sans',sans-serif; color:#3A1800; pointer-events:none; image-rendering:pixelated; }
+    /* Decorative bricks */
+    .db { position:absolute; background:#B85828; border:3px solid #6A2800; border-radius:2px; pointer-events:none;
+      background-image: linear-gradient(90deg,transparent 50%,rgba(0,0,0,0.15) 50%),
+                        linear-gradient(180deg,transparent 50%,rgba(0,0,0,0.1) 50%);
+      background-size: 50% 100%, 100% 50%;
+    }
+    /* Ground */
+    .m-ground { position:absolute; bottom:0; left:0; right:0; height:90px; pointer-events:none; }
+    .m-g-grass { position:absolute; top:0; left:0; right:0; height:22px; background:linear-gradient(180deg,#5CC020 0%,#52A024 70%,#3A7818 100%); }
+    .m-g-grass::before { content:''; position:absolute; top:0; left:0; right:0; height:5px; background:rgba(255,255,255,0.18); }
+    .m-g-dirt { position:absolute; top:22px; left:0; right:0; bottom:0; background:#A07830;
+      background-image: repeating-linear-gradient(90deg,transparent 0,transparent 34px,rgba(0,0,0,0.18) 34px,rgba(0,0,0,0.18) 36px),
+                        repeating-linear-gradient(180deg,transparent 0,transparent 20px,rgba(0,0,0,0.14) 20px,rgba(0,0,0,0.14) 22px),
+                        linear-gradient(180deg,#A07830,#8B6914);
+    }
     .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
     .mario-title .tl { color:#FFD54F; }
     .hit-ctr { position:absolute; top:28px; right:28px; background:rgba(0,0,0,0.55); color:white; font-weight:800; font-size:1.15rem; padding:7px 16px; border-radius:20px; pointer-events:none; }
-    #brick-wrap { position:absolute; bottom:46vh; left:72%; pointer-events:none; }
+    #brick-wrap { position:absolute; bottom:clamp(220px,32vh,310px); left:calc(50% - 32px); pointer-events:none; }
     #brick-svg { display:block; image-rendering:pixelated; }
     .heart-pop { position:absolute; font-size:2rem; pointer-events:none; animation:heartFly 0.9s ease-out forwards; left:50%; transform:translateX(-50%); top:-10px; z-index:20; }
     @keyframes heartFly { 0%{transform:translateX(-50%) translateY(0) scale(0.4);opacity:1} 30%{opacity:1} 100%{transform:translateX(-50%) translateY(-110px) scale(1.6);opacity:0} }
-    #mario-char { position:absolute; bottom:17vh; left:66%; pointer-events:none; }
-    .mario-jump { animation:marioJump 0.5s cubic-bezier(0.4,0,0.6,1); }
-    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(-29vh)} }
+    #mario-char { position:absolute; bottom:90px; left:calc(50% - 36px); pointer-events:none; }
+    .mario-jump { animation:marioJump 0.48s cubic-bezier(0.4,0,0.6,1); }
+    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(clamp(-160px,-24vh,-110px))} }
     .mario-ground { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(180deg,#52A024 0%,#6BC42A 22%,#8B6914 22%,#A07830 100%); pointer-events:none; }
     .mario-ground::before { content:''; position:absolute; top:0; left:0; right:0; height:22px; background:repeating-linear-gradient(90deg,transparent 0px,transparent 32px,rgba(0,0,0,0.12) 32px,rgba(0,0,0,0.12) 34px); }
     .click-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; font-weight:700; font-size:0.88rem; padding:7px 20px; border-radius:20px; pointer-events:none; animation:blink 1.6s ease-in-out infinite; }
@@ -244,7 +293,7 @@
     .lv-meaning.show { opacity:1; }
 
     /* ── IOS HOME SCREEN ── */
-    .ios-wp { position:absolute; inset:0; background:linear-gradient(160deg,#FF9A3C 0%,#FF6835 20%,#FF4060 50%,#C2187F 78%,#8F1A6E 100%); }
+    .ios-wp { position:absolute; inset:0; background:linear-gradient(160deg,#89F7FE 0%,#5BC8F5 35%,#66A6FF 70%,#8B9FFF 100%); }
     .ios-status { position:absolute; top:0; left:0; right:0; height:44px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; z-index:100; }
     .ios-time { font-size:0.95rem; font-weight:700; color:white; }
     .ios-status-r { display:flex; align-items:center; gap:5px; }
@@ -340,12 +389,52 @@
 
 <!-- ══ MARIO ══ -->
 <div id="s-mario" class="screen">
+  <!-- Clouds -->
+  <div class="m-cloud cl1"></div>
+  <div class="m-cloud cl2"></div>
+  <div class="m-cloud cl3"></div>
+  <div class="m-cloud cl4"></div>
+  <!-- Hills -->
+  <div class="m-hill hill1"></div>
+  <div class="m-hill hill2"></div>
+  <div class="m-hill hill3"></div>
+  <!-- Pipe -->
+  <div class="m-pipe" style="left:12%;bottom:90px;">
+    <div class="m-pipe-head" style="bottom:clamp(70px,9.5vh,110px);"></div>
+    <div class="m-pipe-body" style="height:clamp(70px,9.5vh,110px);"></div>
+  </div>
+  <!-- Bushes -->
+  <div class="m-bush" style="right:18%;">
+    <div class="m-bush-c" style="width:38px;height:32px;margin-right:-10px;margin-bottom:4px;"></div>
+    <div class="m-bush-c" style="width:54px;height:48px;z-index:1;"></div>
+    <div class="m-bush-c" style="width:38px;height:32px;margin-left:-10px;margin-bottom:4px;"></div>
+  </div>
+  <div class="m-bush" style="left:24%;">
+    <div class="m-bush-c" style="width:30px;height:26px;margin-right:-8px;margin-bottom:2px;"></div>
+    <div class="m-bush-c" style="width:44px;height:38px;z-index:1;"></div>
+    <div class="m-bush-c" style="width:30px;height:26px;margin-left:-8px;margin-bottom:2px;"></div>
+  </div>
+  <!-- Decorative background blocks -->
+  <div class="db" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:20%;bottom:44vh;"></div>
+  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(30px,4.5vw,48px));bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
+  <div class="db" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(62px,9.5vw,98px));bottom:44vh;"></div>
+  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);left:calc(20% + clamp(94px,14.5vw,148px));bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
+  <!-- Lone floating Q block (like Mario 1-1) -->
+  <div class="dq" style="width:clamp(30px,4.2vw,48px);height:clamp(30px,4.2vw,48px);left:30%;bottom:56vh;font-size:clamp(0.85rem,1.6vw,1.15rem);">?</div>
+  <!-- Right side Q block -->
+  <div class="dq" style="width:clamp(28px,4vw,44px);height:clamp(28px,4vw,44px);right:22%;bottom:44vh;font-size:clamp(0.8rem,1.5vw,1.1rem);">?</div>
+  <!-- Hit counter -->
   <div class="hit-ctr" id="hit-ctr">💗 0 / 3</div>
   <div id="brick-wrap">
     <img id="brick-svg" src="mario-brick.png" width="64" height="64" style="image-rendering:pixelated;display:block;" alt="brick"/>
   </div>
   <div id="mario-char">
     <img src="mario-jump.png" style="height:90px;width:auto;image-rendering:pixelated;display:block;" alt="마리오"/>
+  </div>
+  <!-- Ground -->
+  <div class="m-ground">
+    <div class="m-g-grass"></div>
+    <div class="m-g-dirt"></div>
   </div>
   <div class="click-hint">화면을 클릭하세요! (3번)</div>
 </div>
