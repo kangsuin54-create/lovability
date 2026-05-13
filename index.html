@@ -80,13 +80,19 @@
     .mario-title { position:absolute; top:36px; left:50%; transform:translateX(-50%); font-family:'Black Han Sans',sans-serif; font-size:clamp(1.4rem,4vw,2.2rem); color:white; text-shadow:3px 3px 0 rgba(0,0,0,0.25); white-space:nowrap; pointer-events:none; }
     .mario-title .tl { color:#FFD54F; }
     .hit-ctr { position:absolute; top:28px; right:28px; background:rgba(0,0,0,0.55); color:white; font-weight:800; font-size:1.15rem; padding:7px 16px; border-radius:20px; pointer-events:none; }
-    #brick-wrap { position:absolute; bottom:clamp(220px,32vh,310px); left:calc(50% - 32px); pointer-events:none; }
+    /* Mario title */
+    .mario-pres-title { position:absolute; top:14%; left:50%; transform:translateX(-50%); text-align:center; z-index:10; white-space:nowrap; pointer-events:none; }
+    .mario-title-main { font-family:'Black Han Sans',sans-serif; font-size:clamp(1.6rem,4.2vw,3.2rem); color:white; letter-spacing:2px;
+      text-shadow: 3px 3px 0 #A03000, -3px -3px 0 #A03000, 3px -3px 0 #A03000, -3px 3px 0 #A03000, 0 4px 0 #6A1800; }
+    .mario-title-sub { font-size:clamp(0.75rem,1.6vw,1rem); color:#FFD54F; text-shadow:1px 1px 0 rgba(0,0,0,0.7); margin-top:6px; letter-spacing:1px; }
+    /* Brick wrap - dark bg for mortar lines */
+    #brick-wrap { position:absolute; bottom:clamp(200px,30vh,290px); left:50%; transform:translateX(-50%); pointer-events:none; background:#5C2800; border-radius:3px; }
     #brick-svg { display:block; image-rendering:pixelated; }
     .heart-pop { position:absolute; font-size:2rem; pointer-events:none; animation:heartFly 0.9s ease-out forwards; left:50%; transform:translateX(-50%); top:-10px; z-index:20; }
     @keyframes heartFly { 0%{transform:translateX(-50%) translateY(0) scale(0.4);opacity:1} 30%{opacity:1} 100%{transform:translateX(-50%) translateY(-110px) scale(1.6);opacity:0} }
-    #mario-char { position:absolute; bottom:90px; left:calc(50% - 36px); pointer-events:none; }
+    #mario-char { position:absolute; bottom:90px; left:50%; transform:translateX(-50%); pointer-events:none; }
     .mario-jump { animation:marioJump 0.48s cubic-bezier(0.4,0,0.6,1); }
-    @keyframes marioJump { 0%,100%{transform:translateY(0)} 42%,58%{transform:translateY(clamp(-160px,-24vh,-110px))} }
+    @keyframes marioJump { 0%,100%{transform:translateX(-50%) translateY(0)} 42%,58%{transform:translateX(-50%) translateY(clamp(-140px,-20vh,-100px))} }
     .mario-ground { position:absolute; bottom:0; left:0; right:0; height:80px; background:linear-gradient(180deg,#52A024 0%,#6BC42A 22%,#8B6914 22%,#A07830 100%); pointer-events:none; }
     .mario-ground::before { content:''; position:absolute; top:0; left:0; right:0; height:22px; background:repeating-linear-gradient(90deg,transparent 0px,transparent 32px,rgba(0,0,0,0.12) 32px,rgba(0,0,0,0.12) 34px); }
     .click-hint { position:absolute; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(0,0,0,0.5); color:white; font-weight:700; font-size:0.88rem; padding:7px 20px; border-radius:20px; pointer-events:none; animation:blink 1.6s ease-in-out infinite; }
@@ -389,6 +395,13 @@
 
 <!-- ══ MARIO ══ -->
 <div id="s-mario" class="screen">
+  <!-- Presentation title -->
+  <div class="mario-pres-title">
+    <div class="mario-title-main">💗 러빌리티 (Lovability)</div>
+    <div class="mario-title-sub">사랑하는 능력에 관한 이야기</div>
+  </div>
+  <!-- Coins audio -->
+  <audio id="coin-audio" src="coin.mp3" preload="auto"></audio>
   <!-- Clouds -->
   <div class="m-cloud cl1"></div>
   <div class="m-cloud cl2"></div>
@@ -715,6 +728,22 @@
 </div>
 
 <script>
+  /* ── AUDIO ── */
+  function makeAudio(src) { const a = new Audio(src); a.preload='auto'; return a; }
+  const sfxCoin  = makeAudio('coin.mp3');
+  const sfxBreak = makeAudio('break.mp3');
+  const sfxRain  = makeAudio('rain.mp3');
+
+  function playCoin() {
+    try { sfxCoin.currentTime=0; sfxCoin.play(); setTimeout(()=>{ sfxCoin.pause(); sfxCoin.currentTime=0; },1000); } catch(e){}
+  }
+  function playBreak() {
+    try { sfxBreak.currentTime=0; sfxBreak.play(); setTimeout(()=>{ sfxBreak.pause(); sfxBreak.currentTime=0; },1000); } catch(e){}
+  }
+  function playRain() {
+    try { sfxRain.currentTime=0; sfxRain.play(); setTimeout(()=>{ sfxRain.pause(); sfxRain.currentTime=0; },2000); } catch(e){}
+  }
+
   /* ── STATE ── */
   let current = 's-mario';
   let marioHits = 0, marioLocked = false;
@@ -743,8 +772,8 @@
     if (id==='s-story2') setTimeout(()=>{ if(current==='s-story2') go('s-story3'); }, 2800);
     if (id==='s-story3') setTimeout(()=>{ if(current==='s-story3') go('s-choice'); }, 2800);
     if ((id==='s-scene-a'||id==='s-scene-b') && !rainDone[id+'-p']) { makePuddles(id); rainDone[id+'-p']=true; }
-    if (id==='s-scene-a') scheduleThunder('thunder-a');
-    if (id==='s-scene-b') scheduleThunder('thunder-b');
+    if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
+    if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
     if (id==='s-results') setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600);
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
@@ -785,6 +814,7 @@
   function marioHit() {
     if(marioLocked||marioHits>=3) return;
     marioLocked=true; marioHits++;
+    playCoin();
     const mc=document.getElementById('mario-char'); mc.classList.add('mario-jump');
     // 마리오 박치기 → 화면 전체 진동 (벽돌은 그 자리 유지)
     setTimeout(()=>{
@@ -969,6 +999,7 @@
       case 's-intro-word':
         if (lvPhase === 0) {
           lvPhase = 1;
+          playBreak();
           document.getElementById('lv-able').classList.add('fly');
           setTimeout(()=> document.getElementById('lv-ability').classList.add('appear'), 200);
           setTimeout(()=>{
