@@ -666,32 +666,63 @@
 </div>
 
 <script>
-  /* ══ AUDIO SYSTEM - 모바일 완전 최적화 ══
-     원칙: 로드 시점에 미리 생성, 이벤트 안에서 new Audio() 금지
-     iOS: 첫 터치에서 모든 오디오 context 잠금 해제             */
+  /* ══ WEB AUDIO API - iOS/Android 완전 호환 ══
+     HTML Audio 대신 Web Audio API 사용:
+     - 페이지 로드 즉시 fetch로 ArrayBuffer 다운로드
+     - 첫 터치에서 AudioContext 생성 + 디코드 (iOS 필수)
+     - BufferSource로 재생 → 연속/중복 재생 모두 가능        */
 
-  // 코인 3개 풀 (연속 클릭 대응), 나머지는 단일 객체
-  function _mk(src) { const a=new Audio(src); a.preload='auto'; a.load(); return a; }
-  const COIN_POOL = [_mk('coin.mp3'), _mk('coin.mp3'), _mk('coin.mp3')];
-  let   COIN_IDX  = 0;
-  const SFX_BREAK = _mk('book.mp3');
-  const SFX_RAIN  = _mk('rain.mp3');
-  const SFX_VOTE  = _mk('vote.mp3');
-  const ALL_AUDIO = [...COIN_POOL, SFX_BREAK, SFX_RAIN, SFX_VOTE];
+  let _ctx = null;
+  const _raw = {};   // fetch된 ArrayBuffer 저장
+  const _bufs = {};  // 디코드된 AudioBuffer 저장
 
-  // iOS Safari 오디오 잠금 해제 - 첫 사용자 제스처 시 실행
-  let _sfxReady = false;
-  function _sfxUnlock() {
-    if (_sfxReady) return; _sfxReady = true;
-    ALL_AUDIO.forEach(a => {
-      a.volume = 0.001;
-      const p = a.play();
-      const reset = () => { try { a.pause(); a.currentTime=0; a.volume=1; } catch(e){} };
-      if (p) p.then(reset).catch(reset); else reset();
-    });
+  // ① 페이지 로드 직후 파일 다운로드 (AudioContext 불필요)
+  const _files = { coin:'coin.mp3', book:'book.mp3', rain:'rain.mp3', vote:'vote.mp3' };
+  Object.entries(_files).forEach(([k,url]) => {
+    fetch(url).then(r=>r.arrayBuffer()).then(ab=>{ _raw[k]=ab; }).catch(()=>{});
+  });
+
+  // ② 첫 사용자 제스처에서 AudioContext 생성 + 디코드
+  let _ctxReady = false;
+  function _initCtx() {
+    if (_ctxReady) { if(_ctx && _ctx.state==='suspended') _ctx.resume(); return; }
+    _ctxReady = true;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      _ctx = new AC();
+      // 이미 fetch된 파일들 디코드
+      Object.entries(_raw).forEach(([k,ab]) => {
+        _ctx.decodeAudioData(ab.slice(0), buf => { _bufs[k]=buf; }, ()=>{});
+      });
+      // 아직 fetch 중인 파일은 완료 시 디코드
+      Object.entries(_files).forEach(([k,url]) => {
+        if (_bufs[k] || !_ctx) return;
+        fetch(url).then(r=>r.arrayBuffer())
+          .then(ab=>{ _raw[k]=ab; if(_ctx) _ctx.decodeAudioData(ab.slice(0), buf=>{ _bufs[k]=buf; }, ()=>{}); })
+          .catch(()=>{});
+      });
+    } catch(e) {}
   }
-  document.addEventListener('touchstart', _sfxUnlock, { once:true, passive:true });
-  document.addEventListener('click',      _sfxUnlock, { once:true });
+  // touchstart에서 동기적으로 AudioContext 생성 (iOS 필수)
+  document.addEventListener('touchstart', _initCtx, { passive:true });
+  document.addEventListener('click',      _initCtx);
+
+  // ③ 재생 헬퍼
+  function _play(key, stopMs) {
+    if (!_ctx || !_bufs[key]) return;
+    if (_ctx.state === 'suspended') { _ctx.resume().then(()=>_playNow(key,stopMs)); return; }
+    _playNow(key, stopMs);
+  }
+  function _playNow(key, stopMs) {
+    try {
+      const src = _ctx.createBufferSource();
+      src.buffer = _bufs[key];
+      src.connect(_ctx.destination);
+      src.start(0);
+      if (stopMs) src.stop(_ctx.currentTime + stopMs/1000);
+    } catch(e) {}
+  }
 
   // 더블탭 줌 방지
   let lastTap = 0;
@@ -702,26 +733,24 @@
   }, { passive: false });
 
   // ── 재생 함수들 ──
-  function playCoin() {
-    const a = COIN_POOL[COIN_IDX]; COIN_IDX = (COIN_IDX+1) % 3;
-    try { a.currentTime=0; a.volume=1; const p=a.play(); if(p) p.catch(()=>{}); } catch(e){}
-  }
-  function playBreak() {
-    try { SFX_BREAK.currentTime=0; SFX_BREAK.volume=1; const p=SFX_BREAK.play(); if(p) p.catch(()=>{}); } catch(e){}
-  }
+  function playCoin()  { _play('coin', 1000); }
+  function playBreak() { _play('book', 1000); }
   function playRain() {
+    if (!_ctx || !_bufs.rain) return;
+    if (_ctx.state === 'suspended') { _ctx.resume().then(playRain); return; }
     try {
-      SFX_RAIN.currentTime=0; SFX_RAIN.volume=1;
-      const p=SFX_RAIN.play(); if(p) p.catch(()=>{});
-      setTimeout(()=>{
-        let vol=1;
-        const fi=setInterval(()=>{
-          vol=Math.max(0,vol-0.05);
-          try { SFX_RAIN.volume=vol; } catch(e){}
-          if(vol<=0){ clearInterval(fi); try{ SFX_RAIN.pause(); SFX_RAIN.currentTime=0; SFX_RAIN.volume=1; }catch(e){} }
-        },50);
-      },2000);
-    } catch(e){}
+      const src  = _ctx.createBufferSource();
+      const gain = _ctx.createGain();
+      src.buffer = _bufs.rain;
+      // 0~2초: 볼륨 1, 2~3초: 페이드아웃
+      gain.gain.setValueAtTime(1, _ctx.currentTime);
+      gain.gain.setValueAtTime(1, _ctx.currentTime + 2);
+      gain.gain.linearRampToValueAtTime(0, _ctx.currentTime + 3);
+      src.connect(gain);
+      gain.connect(_ctx.destination);
+      src.start(0);
+      src.stop(_ctx.currentTime + 3);
+    } catch(e) {}
   }
 
   /* ── STATE ── */
@@ -754,7 +783,7 @@
     if ((id==='s-scene-a'||id==='s-scene-b') && !rainDone[id+'-p']) { makePuddles(id); rainDone[id+'-p']=true; }
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
-    if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ try{ SFX_VOTE.currentTime=0; SFX_VOTE.volume=1; const p=SFX_VOTE.play(); if(p) p.catch(()=>{}); }catch(e){} },2000); }
+    if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ _play('vote'); },2000); }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
