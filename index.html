@@ -677,7 +677,7 @@
   const _bufs = {};  // 디코드된 AudioBuffer 저장
 
   // ① 페이지 로드 직후 파일 다운로드 (AudioContext 불필요)
-  const _files = { coin:'coin.mp3', book:'book.mp3', rain:'rain.mp3', vote:'vote.mp3' };
+  const _files = { coin:'coin.mp3', book:'book.mp3', rain:'rain.mp3', vote:'vote.mp3', fanfare:'fanfare.mp3', ttrt:'뚜루뚜.mp3' };
   Object.entries(_files).forEach(([k,url]) => {
     fetch(url).then(r=>r.arrayBuffer()).then(ab=>{ _raw[k]=ab; }).catch(()=>{});
   });
@@ -735,6 +735,25 @@
   // ── 재생 함수들 ──
   function playCoin()  { _play('coin', 1000); }
   function playBreak() { _play('book', 1000); }
+  function playFanfare() {
+    setTimeout(() => {
+      if (!_ctx || !_bufs['ttrt']) return;
+      if (_ctx.state === 'suspended') { _ctx.resume().then(playFanfare); return; }
+      try {
+        const src  = _ctx.createBufferSource();
+        const gain = _ctx.createGain();
+        src.buffer = _bufs['ttrt'];
+        src.connect(gain);
+        gain.connect(_ctx.destination);
+        const dur = _bufs['ttrt'].duration;
+        const fadeStart = Math.max(dur - 2, dur * 0.7);
+        gain.gain.setValueAtTime(1, _ctx.currentTime);
+        gain.gain.setValueAtTime(1, _ctx.currentTime + fadeStart);
+        gain.gain.linearRampToValueAtTime(0, _ctx.currentTime + dur);
+        src.start(0);
+      } catch(e) {}
+    }, 3000);
+  }
   function playRain() {
     if (!_ctx || !_bufs.rain) return;
     if (_ctx.state === 'suspended') { _ctx.resume().then(playRain); return; }
@@ -784,6 +803,7 @@
     if (id==='s-scene-a') { scheduleThunder('thunder-a'); playRain(); }
     if (id==='s-scene-b') { scheduleThunder('thunder-b'); playRain(); }
     if (id==='s-results') { setTimeout(()=>{ document.getElementById('bar-a').style.width='8%'; document.getElementById('bar-b').style.width='92%'; },600); setTimeout(()=>{ _play('vote'); },2000); }
+    if (id==='s-gallery') { playFanfare(); }
     if (id==='s-phone') initPhone();
     if (id==='s-kakao') initKakao();
   }
