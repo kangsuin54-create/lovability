@@ -736,23 +736,20 @@
   function playCoin()  { _play('coin', 1000); }
   function playBreak() { _play('book', 1000); }
   function playFanfare() {
-    setTimeout(() => {
-      if (!_ctx || !_bufs['ttrt']) return;
-      if (_ctx.state === 'suspended') { _ctx.resume().then(playFanfare); return; }
-      try {
-        const src  = _ctx.createBufferSource();
-        const gain = _ctx.createGain();
-        src.buffer = _bufs['ttrt'];
-        src.connect(gain);
-        gain.connect(_ctx.destination);
-        const dur = _bufs['ttrt'].duration;
-        const fadeStart = Math.max(dur - 2, dur * 0.7);
-        gain.gain.setValueAtTime(1, _ctx.currentTime);
-        gain.gain.setValueAtTime(1, _ctx.currentTime + fadeStart);
-        gain.gain.linearRampToValueAtTime(0, _ctx.currentTime + dur);
-        src.start(0);
-      } catch(e) {}
-    }, 3000);
+    if (!_ctx || !_bufs['ttrt']) return;
+    if (_ctx.state === 'suspended') { _ctx.resume().then(playFanfare); return; }
+    try {
+      const src  = _ctx.createBufferSource();
+      const gain = _ctx.createGain();
+      src.buffer = _bufs['ttrt'];
+      src.connect(gain);
+      gain.connect(_ctx.destination);
+      gain.gain.setValueAtTime(1, _ctx.currentTime);
+      gain.gain.setValueAtTime(1, _ctx.currentTime + 2);
+      gain.gain.linearRampToValueAtTime(0, _ctx.currentTime + 3);
+      src.start(0);
+      src.stop(_ctx.currentTime + 3);
+    } catch(e) {}
   }
   function playRain() {
     if (!_ctx || !_bufs.rain) return;
