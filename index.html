@@ -722,9 +722,12 @@
 
   // ③ 재생 헬퍼
   function _play(key, stopMs) {
-    if (!_ctx || !_bufs[key]) return;
-    if (_ctx.state === 'suspended') { _ctx.resume().then(()=>_playNow(key,stopMs)); return; }
-    _playNow(key, stopMs);
+    if (!_ctx) return;
+    if (_ctx.state === 'suspended') { _ctx.resume().then(()=>_play(key,stopMs)); return; }
+    if (_bufs[key]) { _playNow(key, stopMs); return; }
+    if (_raw[key]) {
+      _ctx.decodeAudioData(_raw[key].slice(0), buf => { _bufs[key]=buf; _playNow(key,stopMs); }, ()=>{});
+    }
   }
   function _playNow(key, stopMs) {
     try {
