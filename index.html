@@ -484,7 +484,7 @@
   <div class="storm-clouds"></div>
   <div class="scene-rain" id="rain-sb"></div>
   <div class="scene-label">B 상황</div>
-  <div class="scene-back-hint">화면을 클릭하면 설문조사로 이동합니다</div>
+  <div class="scene-back-hint">화면을 클릭하면 계속됩니다</div>
 </div>
 
 <!-- ══ SURVEY ══ -->
@@ -865,7 +865,7 @@
     }, 200);
     setTimeout(spawnHeart,210);
     document.getElementById('hit-ctr').textContent=`💗 ${marioHits} / 3`;
-    setTimeout(()=>{ mc.classList.remove('mario-jump'); marioLocked=false; if(marioHits>=3) go('s-intro-word',700); },520);
+    setTimeout(()=>{ mc.classList.remove('mario-jump'); marioLocked=false; if(marioHits>=3) go('s-choice',700); },520);
   }
   function spawnHeart() {
     const w=document.getElementById('brick-wrap');
@@ -1050,11 +1050,11 @@
           }, 1100);
         } else if (lvPhase === 2) {
           lvPhase = 0;
-          go('s-story1');
+          go('s-survey');
         }
         break;
       case 's-scene-a': go('s-choice'); break;
-      case 's-scene-b': go('s-survey'); break;
+      case 's-scene-b': go('s-intro-word'); break;
       case 's-kakao':   if (ktScriptDone) go('s-gallery'); break;
     }
   });
